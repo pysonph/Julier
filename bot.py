@@ -1119,7 +1119,7 @@ def keep_cookie_alive():
         except: pass
 
 # ==========================================
-# 9. START BOT / DEFAULT COMMAND
+# 9. START BOT / DEFAULT COMMAND (FIXED)
 # ==========================================
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -1132,7 +1132,8 @@ def send_welcome(message):
         if not full_name:
             full_name = "User"
             
-        safe_full_name = full_name.replace('<', '').replace('>', '')
+        # HTML Special Characters တွေကို escape လုပ်ပေးရပါမယ် (User နာမည်မှာ < > ပါရင် Error တက်တတ်လို့ပါ)
+        safe_full_name = full_name.replace('<', '&lt;').replace('>', '&gt;')
         username_display = f'<a href="tg://user?id={tg_id}">{safe_full_name}</a>'
         
         if is_authorized(message):
@@ -1140,12 +1141,13 @@ def send_welcome(message):
         else:
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
+        # FIX: <emoji id='...'> ကို <tg-emoji emoji-id='...'> သို့ ပြောင်းထားသည်
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5956471748030369240'>😒</emoji>\n\n"
-            f"<emoji id='5778145208411624388'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<emoji id='5884366771913233289'>👤</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<emoji id='5231200819986047254'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<emoji id='5204279943499884013'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='5956471748030369240'>😒</tg-emoji>\n\n"
+            f"<tg-emoji emoji-id='5778145208411624388'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<tg-emoji emoji-id='5884366771913233289'>👤</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<tg-emoji emoji-id='5231200819986047254'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<tg-emoji emoji-id='5204279943499884013'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
@@ -1153,6 +1155,7 @@ def send_welcome(message):
     except Exception as e:
         print(f"Start Cmd Error: {e}")
         
+        # Error တက်ခဲ့ရင် ရိုးရိုး Text နဲ့ ပြရန် Backup
         fallback_text = (
             f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
             f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
@@ -1160,8 +1163,8 @@ def send_welcome(message):
             f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
             f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
-        # 𝐈𝐃 ကို backtick (`) ဖြင့် ဖော်ပြထားသဖြင့် MarkdownV2 သို့မဟုတ် Markdown ကို သုံးနိုင်သည်
         bot.reply_to(message, fallback_text, parse_mode="Markdown")
+
 
 # ==========================================
 # 10. RUN BOT
