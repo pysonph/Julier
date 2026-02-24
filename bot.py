@@ -497,6 +497,64 @@ def set_cookie_command(message):
     db.update_main_cookie(parts[1].strip())
     bot.reply_to(message, f"✅ **Main Cookie has been successfully updated securely.**", parse_mode="Markdown")
 
+##################################################
+
+# ==========================================
+# 🔌 SMART COOKIE PARSER (Auto Detect & Save)
+# ==========================================
+@bot.message_handler(func=lambda message: "PHPSESSID" in message.text and "cf_clearance" in message.text)
+def handle_raw_cookie_dump(message):
+    # 1. Owner စစ်ဆေးခြင်း
+    if message.from_user.id != OWNER_ID: 
+        return bot.reply_to(message, "❌ You are not the owner.")
+
+    text = message.text
+    
+    try:
+        # 2. Regex ဖြင့် လိုအပ်သော Cookie များကို ရှာဖွေခြင်း
+        # (Dictionary format ရော Raw Header format ရော နှစ်မျိုးလုံး ဖမ်းပေးပါမည်)
+        
+        # PHPSESSID ရှာခြင်း
+        phpsessid_match = re.search(r"['\"]?PHPSESSID['\"]?\s*[:=]\s*['\"]?([^'\";\s]+)['\"]?", text)
+        
+        # cf_clearance ရှာခြင်း
+        cf_clearance_match = re.search(r"['\"]?cf_clearance['\"]?\s*[:=]\s*['\"]?([^'\";\s]+)['\"]?", text)
+        
+        # __cf_bm (Optional)
+        cf_bm_match = re.search(r"['\"]?__cf_bm['\"]?\s*[:=]\s*['\"]?([^'\";\s]+)['\"]?", text)
+        
+        # _did (Optional)
+        did_match = re.search(r"['\"]?_did['\"]?\s*[:=]\s*['\"]?([^'\";\s]+)['\"]?", text)
+
+        if not phpsessid_match or not cf_clearance_match:
+            return bot.reply_to(message, " PHPSESSID နှင့် cf_clearance ကို ရှာမတွေ့ပါ။ Format မှန်ကန်ကြောင်း စစ်ဆေးပါ။")
+
+        # 3. တန်ဖိုးများ ထုတ်ယူခြင်း
+        val_php = phpsessid_match.group(1)
+        val_cf = cf_clearance_match.group(1)
+
+        # 4. Cookie String ပြန်လည် တည်ဆောက်ခြင်း
+        formatted_cookie = f"PHPSESSID={val_php}; cf_clearance={val_cf};"
+        
+        if cf_bm_match:
+            formatted_cookie += f" __cf_bm={cf_bm_match.group(1)};"
+        if did_match:
+            formatted_cookie += f" _did={did_match.group(1)};"
+
+        # 5. Database ထဲသို့ သိမ်းဆည်းခြင်း (db module ကို အသုံးပြုသည်)
+        db.update_main_cookie(formatted_cookie)
+            
+        # 6. User ကို ပြန်ပြောခြင်း
+        response_msg = f"✅ **Smart Cookie Parser: Success!**\n\n"
+        response_msg += f"🍪 **Saved Cookie:**\n`{formatted_cookie}`"
+        bot.reply_to(message, response_msg, parse_mode="Markdown")
+
+    except Exception as e:
+        bot.reply_to(message, f"❌ Parsing Error: {str(e)}")
+
+
+##################################################
+
 @bot.message_handler(commands=['balance'])
 def check_balance_command(message):
     if not is_authorized(message): return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
@@ -523,52 +581,6 @@ def check_balance_command(message):
             bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=report)
     else:
         bot.reply_to(message, report)
-
-
-# ==========================================
-# 🔌 SMART COOKIE PARSER (Auto Detect)
-# ==========================================
-@bot.message_handler(func=lambda message: "PHPSESSID" in message.text and "cf_clearance" in message.text and ("{" in message.text or "Cookies" in message.text))
-def handle_raw_cookie_dump(message):
-    if message.from_user.id != OWNER_ID: 
-        return bot.reply_to(message, "❌ သင်သည် Owner မဟုတ်ပါ။")
-
-    text = message.text
-    
-    try:
-        phpsessid_match = re.search(r"['\"]PHPSESSID['\"]\s*:\s*['\"]([^'\"]+)['\"]", text)
-        cf_clearance_match = re.search(r"['\"]cf_clearance['\"]\s*:\s*['\"]([^'\"]+)['\"]", text)
-        cf_bm_match = re.search(r"['\"]__cf_bm['\"]\s*:\s*['\"]([^'\"]+)['\"]", text)
-        did_match = re.search(r"['\"]_did['\"]\s*:\s*['\"]([^'\"]+)['\"]", text)
-
-        if not phpsessid_match or not cf_clearance_match:
-            return bot.reply_to(message, " PHPSESSID နှင့် cf_clearance ကို ရှာမတွေ့ပါ။ Format မှန်ကန်ကြောင်း စစ်ဆေးပါ။")
-
-        # 📌 တန်ဖိုးများ ထုတ်ယူခြင်း
-        val_php = phpsessid_match.group(1)
-        val_cf = cf_clearance_match.group(1)
-        val_bm = cf_bm_match.group(1) if cf_bm_match else ""
-        val_did = did_match.group(1) if did_match else ""
-
-        # 📌 String ပြန်လည် တည်ဆောက်ခြင်း
-        formatted_cookie = f"PHPSESSID={val_php}; cf_clearance={val_cf};"
-        if val_bm: formatted_cookie += f" __cf_bm={val_bm};"
-        if val_did: formatted_cookie += f" _did={val_did};"
-
-        # 📌 Database ထဲသို့ တန်းထည့်မည်
-        if settings_collection is not None:
-            settings_collection.update_one({"type": "login_cookies"}, {"$set": {"raw_cookie": formatted_cookie}}, upsert=True)
-            
-            # 📌 User ကို ပြန်ပြောမည်
-            response_msg = f"✅ **Cookie များကို အလိုအလျောက် သိမ်းဆည်းလိုက်ပါပြီ!**\n\n"
-            response_msg += f"📥 **Detected:**\n`/setcookie {formatted_cookie}`"
-            bot.reply_to(message, response_msg, parse_mode="Markdown")
-        else:
-            bot.reply_to(message, "❌ Database Error: Not Connected.")
-
-    except Exception as e:
-        bot.reply_to(message, f"❌ Parsing Error: {str(e)}")
-
 
 
 # ==========================================
