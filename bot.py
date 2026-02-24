@@ -112,6 +112,13 @@ def auto_login_and_get_cookie():
 # ==========================================
 # 📌 PACKAGES
 # ==========================================
+DOUBLE_DIAMOND_PACKAGES = {
+    '55': [{'pid': '22590', 'price': 39.0, 'name': '50+50 💎'}],
+    '165': [{'pid': '22591', 'price': 116.9, 'name': '150+150 💎'}],
+    '275': [{'pid': '22592', 'price': 187.5, 'name': '250+250 💎'}],
+    '565': [{'pid': '22593', 'price': 385, 'name': '500+500 💎'}],
+}
+
 BR_PACKAGES = {
     '86': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}],
     '172': [{'pid': '23', 'price': 122.00, 'name': '172 💎'}],
@@ -121,10 +128,10 @@ BR_PACKAGES = {
     '3688': [{'pid': '28', 'price': 2424.00, 'name': '3688 💎'}],
     '5532': [{'pid': '29', 'price': 3660.00, 'name': '5532 💎'}],
     '9288': [{'pid': '30', 'price': 6079.00, 'name': '9288 💎'}],
-    'b50': [{'pid': '22590', 'price': 39.0, 'name': '50+50 💎'}],
-    'b150': [{'pid': '22591', 'price': 116.9, 'name': '150+150 💎'}],
-    'b250': [{'pid': '22592', 'price': 187.5, 'name': '250+250 💎'}],
-    'b500': [{'pid': '22593', 'price': 385, 'name': '500+500 💎'}],
+    '55': [{'pid': '22590', 'price': 39.0, 'name': '50+50 💎'}],
+    '165': [{'pid': '22591', 'price': 116.9, 'name': '150+150 💎'}],
+    '275': [{'pid': '22592', 'price': 187.5, 'name': '250+250 💎'}],
+    '565': [{'pid': '22593', 'price': 385, 'name': '500+500 💎'}],
     '600': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
     '343': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
     '429': [{'pid': '23', 'price': 122.00, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
@@ -447,11 +454,11 @@ def is_authorized(message):
 # ==========================================
 # 5. RESELLER MANAGEMENT & COMMANDS
 # ==========================================
-@bot.message_handler(commands=['addreseller'])
+@bot.message_handler(commands=['add'])
 def add_reseller(message):
     if message.from_user.id != OWNER_ID: return bot.reply_to(message, "You are not the Owner.")
     parts = message.text.split()
-    if len(parts) < 2: return bot.reply_to(message, "`/addreseller <user_id>`", parse_mode="Markdown")
+    if len(parts) < 2: return bot.reply_to(message, "`/add <user_id>`", parse_mode="Markdown")
         
     target_id = parts[1].strip()
     if not target_id.isdigit(): return bot.reply_to(message, "Please enter the User ID in numbers only.")
@@ -459,13 +466,13 @@ def add_reseller(message):
     if db.add_reseller(target_id, f"User_{target_id}"):
         bot.reply_to(message, f"✅ Reseller ID `{target_id}` has been approved.", parse_mode="Markdown")
     else:
-        bot.reply_to(message, f"⚠️ Reseller ID `{target_id}` is already in the list.", parse_mode="Markdown")
+        bot.reply_to(message, f"Reseller ID `{target_id}` is already in the list.", parse_mode="Markdown")
 
-@bot.message_handler(commands=['removereseller'])
+@bot.message_handler(commands=['remove'])
 def remove_reseller(message):
     if message.from_user.id != OWNER_ID: return bot.reply_to(message, "You are not the Owner.")
     parts = message.text.split()
-    if len(parts) < 2: return bot.reply_to(message, "Usage format - `/removereseller <user_id>`", parse_mode="Markdown")
+    if len(parts) < 2: return bot.reply_to(message, "Usage format - `/remove <user_id>`", parse_mode="Markdown")
         
     target_id = parts[1].strip()
     if target_id == str(OWNER_ID): return bot.reply_to(message, "The Owner cannot be removed.")
@@ -475,18 +482,18 @@ def remove_reseller(message):
     else:
         bot.reply_to(message, "That ID is not in the list.")
 
-@bot.message_handler(commands=['resellers'])
+@bot.message_handler(commands=['users'])
 def list_resellers(message):
     if message.from_user.id != OWNER_ID: return bot.reply_to(message, "You are not the Owner.")
     resellers_list = db.get_all_resellers()
     user_list = []
     
     for r in resellers_list:
-        role = "owner" if r["tg_id"] == str(OWNER_ID) else "reseller"
+        role = "owner" if r["tg_id"] == str(OWNER_ID) else "users"
         user_list.append(f"🟢 ID: `{r['tg_id']}` ({role})\n   BR: ${r.get('br_balance', 0.0)} | PH: ${r.get('ph_balance', 0.0)}")
             
-    final_text = "\n\n".join(user_list) if user_list else "No resellers found."
-    bot.reply_to(message, f"🟢 **Approved Resellers List (V-Wallet):**\n\n{final_text}", parse_mode="Markdown")
+    final_text = "\n\n".join(user_list) if user_list else "No users found."
+    bot.reply_to(message, f"🟢 **Approved users List (V-Wallet):**\n\n{final_text}", parse_mode="Markdown")
 
 @bot.message_handler(commands=['setcookie'])
 def set_cookie_command(message):
@@ -564,8 +571,8 @@ def check_balance_command(message):
     if not user_wallet: return bot.reply_to(message, "Yᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ᴄᴀɴɴᴏᴛ ʙᴇ ғᴏᴜɴᴅ.")
     
     report = f"💳 Yᴏᴜʀ ᴠ-ᴡᴀʟʟᴇᴛ ʙᴀʟᴀɴᴄᴇ\n\n"
-    report += f"🇧🇷 ʙʀ-ʙᴀʟᴀɴᴄᴇ: ${user_wallet.get('br_balance', 0.0):,.2f}\n"
-    report += f"🇵🇭 ᴘʜ-ʙᴀʟᴀɴᴄᴇ: ${user_wallet.get('ph_balance', 0.0):,.2f}"
+    report += f"🇧🇷 ʙʀ-ʙᴀʟᴀɴᴄᴇ  :  ${user_wallet.get('br_balance', 0.0):,.2f}\n"
+    report += f"🇵🇭 ᴘʜ-ʙᴀʟᴀɴᴄᴇ  :  ${user_wallet.get('ph_balance', 0.0):,.2f}"
     
     if message.from_user.id == OWNER_ID:
         loading_msg = bot.reply_to(message, "Fetching real balance from the official account...")
@@ -574,8 +581,8 @@ def check_balance_command(message):
         try:
             balances = get_smile_balance(scraper, headers, 'https://www.smile.one/customer/order')
             report += f"\n\n💳 **Oғғɪᴄɪᴀʟ ᴀᴄᴄᴏᴜɴᴛ-ʙᴀʟᴀɴᴄᴇ:**\n"
-            report += f"ʙʀ-ʙᴀʟᴀɴᴄᴇ: ${balances.get('br_balance', 0.00):,.2f}\n"
-            report += f"ᴘʜ-ʙᴀʟᴀɴᴄᴇ: ${balances.get('ph_balance', 0.00):,.2f}"
+            report += f"ʙʀ-ʙᴀʟᴀɴᴄᴇ  :  ${balances.get('br_balance', 0.00):,.2f}\n"
+            report += f"ᴘʜ-ʙᴀʟᴀɴᴄᴇ  :  ${balances.get('ph_balance', 0.00):,.2f}"
             bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=report, parse_mode="Markdown")
         except:
             bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=report)
@@ -923,20 +930,20 @@ def handle_direct_buy(message):
                     safe_ig_name = html.escape(str(ig_name))
                     safe_username = html.escape(str(username_display))
                     
-                    # 👈 Using Blockquote and Monospace Font together
+                    # 👈 Using Blockquote with Aligned Colons
                     report = (
                         f"<blockquote><code>=== ᴛʀᴀɴꜱᴀᴄᴛɪᴏɴ ʀᴇᴘᴏʀᴛ ===\n\n"
-                        f"ᴏʀᴅᴇʀ sᴛᴀᴛᴜs: ✅ Sᴜᴄᴄᴇss\n"
-                        f"ɢᴀᴍᴇ ɪᴅ: {game_id} {zone_id}\n"
-                        f"ɪɢ ɴᴀᴍᴇ: {safe_ig_name}\n"
-                        f"sᴇʀɪᴀʟ:\n{order_ids_str.strip()}\n"
-                        f"ɪᴛᴇᴍ: {item_input} 💎\n"
-                        f"sᴘᴇɴᴛ: {total_spent:.2f} 🪙\n\n"
-                        f"ᴅᴀᴛᴇ: {date_str}\n"
-                        f"ᴜsᴇʀɴᴀᴍᴇ: {safe_username}\n"
-                        f"sᴘᴇɴᴛ : ${total_spent:.2f}\n"
-                        f"ɪɴɪᴛɪᴀʟ: ${user_v_bal:,.2f}\n"
-                        f"ғɪɴᴀʟ : ${new_v_bal:,.2f}\n\n"
+                        f"ᴏʀᴅᴇʀ sᴛᴀᴛᴜs : ✅ Sᴜᴄᴄᴇss\n"
+                        f"ɢᴀᴍᴇ ɪᴅ      : {game_id} {zone_id}\n"
+                        f"ɪɢ ɴᴀᴍᴇ      : {safe_ig_name}\n"
+                        f"sᴇʀɪᴀʟ       :\n{order_ids_str.strip()}\n"
+                        f"ɪᴛᴇᴍ         : {item_input} 💎\n"
+                        f"sᴘᴇɴᴛ        : {total_spent:.2f} 🪙\n\n"
+                        f"ᴅᴀᴛᴇ         : {date_str}\n"
+                        f"ᴜsᴇʀɴᴀᴍᴇ     : {safe_username}\n"
+                        f"sᴘᴇɴᴛ        : ${total_spent:.2f}\n"
+                        f"ɪɴɪᴛɪᴀʟ      : ${user_v_bal:,.2f}\n"
+                        f"ғɪɴᴀʟ        : ${new_v_bal:,.2f}\n\n"
                         f"Sᴜᴄᴄᴇss {success_count} / Fᴀɪʟ {fail_count}</code></blockquote>"
                     )
 
@@ -954,6 +961,7 @@ def handle_direct_buy(message):
 
     except Exception as e:
         bot.reply_to(message, f"System Error: {str(e)}")
+
                     
 
 # 🌟 NEW: 8.1 MAGIC CHESS V-WALLET ဖြင့် ဝယ်ယူခြင်း 🌟
@@ -1081,6 +1089,7 @@ def show_price_list(message):
         return "\n".join(lines)
 
     br_list = generate_list(BR_PACKAGES)
+    bonus_list = generate_list(DOUBLE_DIAMOND_PACKAGES)
     ph_list = generate_list(PH_PACKAGES)
     mcc_list = generate_list(MCC_PACKAGES)
 
@@ -1088,6 +1097,8 @@ def show_price_list(message):
         f"📋 <b>CURRENT PRICE LIST</b>\n\n"
         f"🇧🇷 <b>BR Packages</b>\n"
         f"<code>{br_list}</code>\n\n"
+        f"🇧🇷 <b>Double Packages</b>\n"
+        f"<code>{bonus_list}</code>\n\n"
         f"🇵🇭 <b>PH Packages</b>\n"
         f"<code>{ph_list}</code>\n\n"
         f"♟️ <b>Magic Chess (MCC)</b>\n"
@@ -1143,11 +1154,11 @@ def send_welcome(message):
             
         # FIX: <emoji id='...'> ကို <tg-emoji emoji-id='...'> သို့ ပြောင်းထားသည်
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='5956471748030369240'>😒</tg-emoji>\n\n"
-            f"<tg-emoji emoji-id='5778145208411624388'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<tg-emoji emoji-id='5884366771913233289'>👤</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<tg-emoji emoji-id='5231200819986047254'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<tg-emoji emoji-id='5204279943499884013'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='6325625905108490795'>🥺</tg-emoji>\n\n"
+            f"<tg-emoji emoji-id='6325666711592769876'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<tg-emoji emoji-id='6325825028382267798'>👤</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<tg-emoji emoji-id='6325338795134687761'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<tg-emoji emoji-id='6325466441562724852'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
