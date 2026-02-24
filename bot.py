@@ -19,7 +19,7 @@ import database as db
 load_dotenv() 
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-OWNER_ID = int(os.getenv('OWNER_ID', 8197491717)) 
+OWNER_ID = int(os.getenv('OWNER_ID', 1318826936)) 
 FB_EMAIL = os.getenv('FB_EMAIL')
 FB_PASS = os.getenv('FB_PASS')
 
