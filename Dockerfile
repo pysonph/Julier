@@ -12,4 +12,4 @@ RUN playwright install chromium
 
 COPY . .
 
-CMD ["python3", "psp.py"]
+CMD ["python3", "bot.py"]
