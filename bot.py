@@ -1141,11 +1141,11 @@ def send_welcome(message):
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5427009714745061633'>🥺</emoji>\n\n"
-            f"Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"𝐈𝐃: <code>{tg_id}</code>\n"
-            f"Sᴛᴀᴛᴜs: {status}\n\n"
-            f"Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5956471748030369240'>😒</emoji>\n\n"
+            f"<emoji id='5778145208411624388'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<emoji id='5884366771913233289'>👤</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<emoji id='5231200819986047254'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<emoji id='5204279943499884013'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
@@ -1154,13 +1154,14 @@ def send_welcome(message):
         print(f"Start Cmd Error: {e}")
         
         fallback_text = (
-            f"ʜᴇʏ ʙᴀʙʏ🥺\n\n"
-            f"Usᴇʀɴᴀᴍᴇ: {full_name}\n"
-            f"𝐈𝐃: `{tg_id}`\n"
-            f"Sᴛᴀᴛᴜs: {status}\n\n"
-            f"Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
+            f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
+            f"🆔 𝐈𝐃: `{tg_id}`\n"
+            f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
+            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
-        bot.reply_to(message, fallback_text)
+        # 𝐈𝐃 ကို backtick (`) ဖြင့် ဖော်ပြထားသဖြင့် MarkdownV2 သို့မဟုတ် Markdown ကို သုံးနိုင်သည်
+        bot.reply_to(message, fallback_text, parse_mode="Markdown")
 
 # ==========================================
 # 10. RUN BOT
@@ -1179,31 +1180,4 @@ if __name__ == '__main__':
     bot.infinity_polling()
     
     
-    
-    
-try:
-        # id='' ကြားထဲက ဂဏန်းတွေကို သင်ကိုယ်တိုင်ရှာထားတဲ့ Premium Emoji ID တွေနဲ့ အစားထိုးပါ
-        welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5956471748030369240'>😒</emoji>\n\n"
-            f"<emoji id='5778145208411624388'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<emoji id='5884366771913233289'>👤</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<emoji id='5231200819986047254'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<emoji id='5204279943499884013'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
-        )
-        
-        # parse_mode="HTML" ပါမှ Premium Emoji များ အလုပ်လုပ်ပါမည်
-        bot.reply_to(message, welcome_text, parse_mode="HTML")
-        
-    except Exception as e:
-        print(f"Start Cmd Error: {e}")
-        
-        # Fallback မှာတော့ HTML မပါတဲ့အတွက် ရိုးရိုး Emoji ကိုပဲ သုံးထားပါသည်
-        fallback_text = (
-            f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
-            f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
-            f"🆔 𝐈𝐃: `{tg_id}`\n"
-            f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
-            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
-        )
-        # 𝐈𝐃 ကို backtick (`) ဖြင့် ဖော်ပြထားသဖြင့် MarkdownV2 သို့မဟုတ် Markdown ကို သုံးနိုင်သည်
-        bot.reply_to(message, fallback_text, parse_mode="Markdown")
+ 
