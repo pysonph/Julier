@@ -595,6 +595,7 @@ def handle_topup(message):
     
     activation_code = match.group(1).strip()
     tg_id = str(message.from_user.id)
+    user_id_int = message.from_user.id  # Integer ID for comparison
     
     loading_msg = bot.reply_to(message, f"Checking Code `{activation_code}`...")
     
@@ -681,20 +682,23 @@ def handle_topup(message):
             if added_amount <= 0:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=f"sᴍɪʟᴇ ᴏɴᴇ ʀᴇᴅᴇᴇᴍ ᴄᴏᴅᴇ sᴜᴄᴄᴇss ✅\n(Cannot retrieve exact amount due to System Delay.)")
             else:
-                # 📌 Calculate Commission Fee
-                if added_amount >= 10000:
-                    fee_percent = 0.10
-                elif added_amount >= 5000:
-                    fee_percent = 0.15
-                elif added_amount >= 1000:
-                    fee_percent = 0.20
+                if user_id_int == OWNER_ID:
+                    fee_percent = 0.0
+                    fee_amount = 0.0
+                    net_added = added_amount
                 else:
-                    fee_percent = 0.30  # 0.3% if under 300
+                    if added_amount >= 10000:
+                        fee_percent = 0.10
+                    elif added_amount >= 5000:
+                        fee_percent = 0.15
+                    elif added_amount >= 1000:
+                        fee_percent = 0.20
+                    else:
+                        fee_percent = 0.30  
 
-                fee_amount = round(added_amount * (fee_percent / 100), 2)
-                net_added = round(added_amount - fee_amount, 2)
-
-                # Add Balance to Database
+                    fee_amount = round(added_amount * (fee_percent / 100), 2)
+                    net_added = round(added_amount - fee_amount, 2)
+            
                 user_wallet = db.get_reseller(tg_id)
                 if active_region == 'BR':
                     assets = user_wallet.get('br_balance', 0.0) if user_wallet else 0.0
@@ -726,6 +730,7 @@ def handle_topup(message):
                     text=msg, 
                     parse_mode="HTML"
                 )
+
 
 # ==========================================
 # 7. 📌 COMMAND TO CHECK ROLE
@@ -1058,6 +1063,40 @@ def handle_mcc_buy(message):
     except Exception as e:
         bot.reply_to(message, f"Sʏsᴛᴇᴍ ᴇʀʀᴏʀ: {str(e)}")
 
+
+# ==========================================
+# 11. 📜 PRICE LIST COMMAND (.list / /list)
+# ==========================================
+@bot.message_handler(commands=['list'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.list')
+def show_price_list(message):
+    if not is_authorized(message):
+        return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
+
+    def generate_list(package_dict):
+        lines = []
+        for key, items in package_dict.items():
+            total_price = sum(item['price'] for item in items)
+            lines.append(f"{key:<5} : ${total_price:,.2f}")
+        return "\n".join(lines)
+
+    br_list = generate_list(BR_PACKAGES)
+    ph_list = generate_list(PH_PACKAGES)
+    mcc_list = generate_list(MCC_PACKAGES)
+
+    response_text = (
+        f"📋 <b>CURRENT PRICE LIST</b>\n\n"
+        f"🇧🇷 <b>BR Packages</b>\n"
+        f"<code>{br_list}</code>\n\n"
+        f"🇵🇭 <b>PH Packages</b>\n"
+        f"<code>{ph_list}</code>\n\n"
+        f"♟️ <b>Magic Chess (MCC)</b>\n"
+        f"<code>{mcc_list}</code>"
+    )
+
+    bot.reply_to(message, response_text, parse_mode="HTML")
+
+
 # ==========================================
 # 10. 💓 HEARTBEAT FUNCTION
 # ==========================================
@@ -1102,7 +1141,7 @@ def send_welcome(message):
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ🥺\n\n"
+            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5427009714745061633'>🥺</emoji>\n\n"
             f"Usᴇʀɴᴀᴍᴇ: {username_display}\n"
             f"𝐈𝐃: <code>{tg_id}</code>\n"
             f"Sᴛᴀᴛᴜs: {status}\n\n"
@@ -1138,3 +1177,33 @@ if __name__ == '__main__':
 
     print("Bot is successfully running (With MongoDB Virtual Wallet & Magic Chess System)...")
     bot.infinity_polling()
+    
+    
+    
+    
+try:
+        # id='' ကြားထဲက ဂဏန်းတွေကို သင်ကိုယ်တိုင်ရှာထားတဲ့ Premium Emoji ID တွေနဲ့ အစားထိုးပါ
+        welcome_text = (
+            f"ʜᴇʏ ʙᴀʙʏ <emoji id='5956471748030369240'>😒</emoji>\n\n"
+            f"<emoji id='5778145208411624388'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<emoji id='5884366771913233289'>👤</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<emoji id='5231200819986047254'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<emoji id='5204279943499884013'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+        )
+        
+        # parse_mode="HTML" ပါမှ Premium Emoji များ အလုပ်လုပ်ပါမည်
+        bot.reply_to(message, welcome_text, parse_mode="HTML")
+        
+    except Exception as e:
+        print(f"Start Cmd Error: {e}")
+        
+        # Fallback မှာတော့ HTML မပါတဲ့အတွက် ရိုးရိုး Emoji ကိုပဲ သုံးထားပါသည်
+        fallback_text = (
+            f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
+            f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
+            f"🆔 𝐈𝐃: `{tg_id}`\n"
+            f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
+            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+        )
+        # 𝐈𝐃 ကို backtick (`) ဖြင့် ဖော်ပြထားသဖြင့် MarkdownV2 သို့မဟုတ် Markdown ကို သုံးနိုင်သည်
+        bot.reply_to(message, fallback_text, parse_mode="Markdown")
