@@ -1292,7 +1292,7 @@ def send_help_message(message):
     # Header Design
     help_text = (
         f"<b>🤖 𝐁𝐎𝐓 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐌𝐄𝐍𝐔</b>\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n\n"
     )
 
     help_text += (
@@ -1304,7 +1304,7 @@ def send_help_message(message):
         f"<b>♟️ 𝐌𝐚𝐠𝐢𝐜 𝐂𝐡𝐞𝐬𝐬</b>\n"
         f"<blockquote><code>mcc ID (Zone) Pack</code></blockquote>\n"
         f"Ex: <code>mcc 12345678 1234 86</code>\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n\n"
     )
 
     # 2. 👤 USER TOOLS (သာမန်အသုံးပြုသူများအတွက်)
@@ -1329,7 +1329,7 @@ def send_help_message(message):
             f"🔸 <code>/setcookie</code> : Update Cookie\n"
         )
         
-    help_text += f"━━━━━━━━━━━━━━━━━━━━━━━━"
+    help_text += f"━━━━━━━━━━━━━━━━━━━━━"
 
     # Message ပို့မည်
     bot.reply_to(message, help_text, parse_mode="HTML")
