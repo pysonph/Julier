@@ -1261,5 +1261,3 @@ if __name__ == '__main__':
     print("Bot is successfully running (With MongoDB Virtual Wallet & Magic Chess System)...")
     bot.infinity_polling()
     
-DOUBLE_DIAMOND_PACKAGES ကိုခွဲထုတ်ထးလို့ဝယ်လို့ရအောင်ပြင်ပေး။ပြီးတော့ msc 123456789 1234 514 and msc 123456789 (1234) 514 ကွင်းစကွင်းပိတ်မပါလဲ ဝယ်လို့ရအောင်ပြင်ပေး
- 
