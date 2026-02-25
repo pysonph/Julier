@@ -1,11 +1,8 @@
 import os
 import datetime
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 
-# ==========================================
-# 📌 SETUP & CONNECTION
-# ==========================================
 load_dotenv()
 MONGO_URI = os.getenv('MONGO_URI')
 
@@ -14,80 +11,61 @@ if not MONGO_URI:
     exit()
 
 try:
-    # Timeout နှင့် Connection Pool များကို ပိုမိုကောင်းမွန်အောင် သတ်မှတ်ထားသည်
-    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=5000)
     db = client['smile_vwallet_db']
     
     resellers_col = db['resellers']
     settings_col = db['settings']
     orders_col = db['orders']
     
-    print("✅ MongoDB ချိတ်ဆက်မှု အောင်မြင်ပါသည်။ (Virtual Wallet Database)")
+    print("✅ Async MongoDB (Motor) ချိတ်ဆက်မှု အောင်မြင်ပါသည်။")
 except Exception as e:
     print(f"❌ MongoDB ချိတ်ဆက်မှု မအောင်မြင်ပါ: {e}")
     exit()
 
-# မြန်မာစံတော်ချိန် (MMT) ကို Global အနေဖြင့် သတ်မှတ်ထားသည်
 MMT = datetime.timezone(datetime.timedelta(hours=6, minutes=30))
 
-# ==========================================
-# 🚀 DATABASE INDEXING (For Speed Optimization)
-# ==========================================
-def setup_indexes():
-    """ဒေတာများလာသည့်အခါ ရှာဖွေမှုမြန်ဆန်စေရန် Index များ တည်ဆောက်မည်"""
+async def setup_indexes():
     try:
-        resellers_col.create_index("tg_id", unique=True)
-        # Order History ဆွဲထုတ်ရာတွင် မြန်ဆန်စေရန် tg_id နှင့် timestamp ကို ပေါင်း၍ Index လုပ်ထားသည်
-        orders_col.create_index([("tg_id", 1), ("timestamp", -1)])
+        await resellers_col.create_index("tg_id", unique=True)
+        await orders_col.create_index([("tg_id", 1), ("timestamp", -1)])
     except Exception as e:
-        print(f"⚠️ Index ဖန်တီးရာတွင် အမှားရှိပါသည်: {e}")
+        print(f"Index ဖန်တီးရာတွင် အမှားရှိပါသည်: {e}")
 
-# Script run သည်နှင့် Index များကို စစ်ဆေး/တည်ဆောက်မည်
-setup_indexes()
-
-# ==========================================
-# 👑 OWNER & COOKIE MANAGEMENT
-# ==========================================
-def init_owner(owner_id):
-    """Bot စတင်ချိန်တွင် Owner အား Default ထည့်သွင်းပေးမည်"""
+async def init_owner(owner_id):
     owner_str = str(owner_id)
-    if not resellers_col.find_one({"tg_id": owner_str}):
-        resellers_col.insert_one({
+    existing_owner = await resellers_col.find_one({"tg_id": owner_str})
+    if not existing_owner:
+        await resellers_col.insert_one({
             "tg_id": owner_str,
             "username": "Owner",
             "br_balance": 0.0,
             "ph_balance": 0.0
         })
 
-def get_main_cookie():
-    """Main Cookie အား Database မှ ယူမည်"""
-    doc = settings_col.find_one({"type": "main_cookie"})
+async def get_main_cookie():
+    doc = await settings_col.find_one({"type": "main_cookie"})
     return doc.get("cookie", "") if doc else ""
 
-def update_main_cookie(cookie_str):
-    """Main Cookie အား Database သို့ သိမ်းမည်"""
-    settings_col.update_one(
+async def update_main_cookie(cookie_str):
+    await settings_col.update_one(
         {"type": "main_cookie"},
         {"$set": {"cookie": cookie_str}},
         upsert=True
     )
 
-# ==========================================
-# 👥 RESELLER (V-WALLET) MANAGEMENT
-# ==========================================
-def get_reseller(tg_id):
-    """Reseller တစ်ဦးချင်းစီ၏ အချက်အလက်များကို ယူမည်"""
-    return resellers_col.find_one({"tg_id": str(tg_id)})
+async def get_reseller(tg_id):
+    return await resellers_col.find_one({"tg_id": str(tg_id)})
 
-def get_all_resellers():
-    """Reseller အားလုံး၏ စာရင်းကို ယူမည်"""
-    return list(resellers_col.find({}))
+async def get_all_resellers():
+    cursor = resellers_col.find({})
+    return await cursor.to_list(length=None)
 
-def add_reseller(tg_id, username):
-    """Reseller အသစ်ထည့်မည်"""
+async def add_reseller(tg_id, username):
     tg_id_str = str(tg_id)
-    if not resellers_col.find_one({"tg_id": tg_id_str}):
-        resellers_col.insert_one({
+    existing_user = await resellers_col.find_one({"tg_id": tg_id_str})
+    if not existing_user:
+        await resellers_col.insert_one({
             "tg_id": tg_id_str,
             "username": username,
             "br_balance": 0.0,
@@ -96,17 +74,12 @@ def add_reseller(tg_id, username):
         return True
     return False
 
-def remove_reseller(tg_id):
-    """Reseller အား စာရင်းမှ ဖျက်မည်"""
-    result = resellers_col.delete_one({"tg_id": str(tg_id)})
+async def remove_reseller(tg_id):
+    result = await resellers_col.delete_one({"tg_id": str(tg_id)})
     return result.deleted_count > 0
 
-def update_balance(tg_id, br_amount=0.0, ph_amount=0.0):
-    """
-    Reseller ၏ Balance အား အတိုး/အလျော့ လုပ်မည်။
-    Float Precision Error (ဥပမာ 0.300000000004) မဖြစ်စေရန် round() သုံးထားပါသည်။
-    """
-    resellers_col.update_one(
+async def update_balance(tg_id, br_amount=0.0, ph_amount=0.0):
+    await resellers_col.update_one(
         {"tg_id": str(tg_id)},
         {"$inc": {
             "br_balance": round(float(br_amount), 2), 
@@ -114,11 +87,7 @@ def update_balance(tg_id, br_amount=0.0, ph_amount=0.0):
         }}
     )
 
-# ==========================================
-# 📜 ORDER HISTORY MANAGEMENT
-# ==========================================
-def save_order(tg_id, game_id, zone_id, item_name, price, order_id, status="success"):
-    """Order အောင်မြင်ပါက Database သို့ မှတ်တမ်းတင်မည်"""
+async def save_order(tg_id, game_id, zone_id, item_name, price, order_id, status="success"):
     now = datetime.datetime.now(MMT)
     
     order_data = {
@@ -132,13 +101,12 @@ def save_order(tg_id, game_id, zone_id, item_name, price, order_id, status="succ
         "date_str": now.strftime("%I:%M:%S %p %d.%m.%Y"), 
         "timestamp": now 
     }
-    orders_col.insert_one(order_data)
+    await orders_col.insert_one(order_data)
 
-def get_user_history(tg_id, limit=5):
-    """User တစ်ယောက်၏ နောက်ဆုံး Order များကို ဆွဲထုတ်မည်"""
+async def get_user_history(tg_id, limit=5):
     cursor = orders_col.find(
         {"tg_id": str(tg_id)}, 
-        {"_id": 0} # _id (ObjectId) ကို ဖျောက်ထားမည်
+        {"_id": 0} 
     ).sort("timestamp", -1).limit(limit)
     
-    return list(cursor)
+    return await cursor.to_list(length=limit)
