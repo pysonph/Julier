@@ -1,18 +1,22 @@
-FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+FROM python:3.11-slim-bullseye
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TZ=Asia/Yangon
 
 WORKDIR /app
 
 COPY requirements.txt .
-RUN apt-get update -y && apt-get upgrade -y \
-    && pip3 install -U pip \
-    && pip3 install -U -r requirements.txt --no-cache-dir \
-    # Clean up apt cache
+
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends tzdata \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && playwright install chromium --with-deps \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN playwright install chromium
-
 COPY . .
+
 
 CMD ["python3", "bot.py"]
