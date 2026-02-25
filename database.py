@@ -103,10 +103,15 @@ async def save_order(tg_id, game_id, zone_id, item_name, price, order_id, status
     }
     await orders_col.insert_one(order_data)
 
-async def get_user_history(tg_id, limit=5):
+async def get_user_history(tg_id, limit=200):
     cursor = orders_col.find(
         {"tg_id": str(tg_id)}, 
         {"_id": 0} 
     ).sort("timestamp", -1).limit(limit)
     
     return await cursor.to_list(length=limit)
+
+
+async def clear_user_history(tg_id):
+    result = await orders_col.delete_many({"tg_id": str(tg_id)})
+    return result.deleted_count
