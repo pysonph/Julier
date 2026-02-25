@@ -1252,6 +1252,7 @@ def keep_cookie_alive():
         except: pass
 
 
+
 # ==========================================
 # ℹ️ HELP COMMAND (.help / /help)
 # ==========================================
@@ -1260,45 +1261,45 @@ async def send_help_message(client, message: Message):
     is_owner = (message.from_user.id == OWNER_ID)
 
     help_text = (
-        f"<b>🤖 𝐁𝐎𝐓 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐌𝐄𝐍𝐔</b>\n"
+        f"**🤖 𝐁𝐎𝐓 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐌𝐄𝐍𝐔**\n"
         f"━━━━━━━━━━━━━━━━━━━\n\n"
     )
 
     help_text += (
-        f"<b>💎 𝐌𝐋𝐁Ｂ 𝐃𝐢𝐚𝐦𝐨𝐧𝐝𝐬</b>\n"
-        f"<blockquote><code>msc ID (Zone) Pack</code></blockquote>\n"
-        f"Ex: <code>msc 12345678 12345 172</code>\n"
-        f"<i>(command : msc, br, ph, mlb, mlp)</i>\n\n"
+        f"**💎 𝐌𝐋𝐁Ｂ 𝐃𝐢𝐚𝐦𝐨𝐧𝐝𝐬**\n"
+        f"> `msc ID (Zone) Pack`\n"
+        f"Ex: `msc 12345678 12345 172`\n"
+        f"*(command : msc, br, ph, mlb, mlp)*\n\n"
 
-        f"<b>♟️ 𝐌𝐚𝐠𝐢𝐜 𝐂𝐡𝐞𝐬𝐬</b>\n"
-        f"<blockquote><code>mcc ID (Zone) Pack</code></blockquote>\n"
-        f"Ex: <code>mcc 12345678 1234 86</code>\n"
+        f"**♟️ 𝐌𝐚𝐠𝐢𝐜 𝐂𝐡𝐞𝐬𝐬**\n"
+        f"> `mcc ID (Zone) Pack`\n"
+        f"Ex: `mcc 12345678 1234 86`\n"
         f"━━━━━━━━━━━━━━━━━━━\n\n"
     )
 
     help_text += (
-        f"<b>👤 𝐔𝐬𝐞𝐫 𝐓𝐨𝐨𝐥𝐬</b>\n"
-        f"🔹 <code>.balance</code>  : Check Wallet Balance\n"
-        f"🔹 <code>.his</code>      : View Order History\n"
-        f"🔹 <code>.listb</code>     : View Price List\n"
-        f"🔹 <code>.listp</code>     : View Price List\n"
-        f"🔹 <code>.listmb</code>     : View Price List\n"
-        f"🔹 <code>.role ID (Zone)</code> : Check IGN\n"
-        f"🔹 <code>.topup Code</code> : Redeem Voucher\n\n"
+        f"**👤 𝐔𝐬𝐞𝐫 𝐓𝐨𝐨𝐥𝐬**\n"
+        f"🔹 `.balance`  : Check Wallet Balance\n"
+        f"🔹 `.his`      : View Order History\n"
+        f"🔹 `.listb`     : View Price List\n"
+        f"🔹 `.listp`     : View Price List\n"
+        f"🔹 `.listmb`     : View Price List\n"
+        f"🔹 `.role ID (Zone)` : Check IGN\n"
+        f"🔹 `.topup Code` : Redeem Voucher\n\n"
     )
 
     if is_owner:
         help_text += (
-            f"<b>👑 𝐎𝐰𝐧𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬</b>\n"
-            f"🔸 <code>/add ID</code>    : Add User\n"
-            f"🔸 <code>/remove ID</code> : Remove User\n"
-            f"🔸 <code>/users</code>     : User List\n"
-            f"🔸 <code>/setcookie</code> : Update Cookie\n"
+            f"**👑 𝐎𝐰𝐧𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬**\n"
+            f"🔸 `/add ID`    : Add User\n"
+            f"🔸 `/remove ID` : Remove User\n"
+            f"🔸 `/users`     : User List\n"
+            f"🔸 `/setcookie` : Update Cookie\n"
         )
         
     help_text += f"━━━━━━━━━━━━━━━━━━━"
 
-    await message.reply(help_text, parse_mode=ParseMode.HTML)
+    await message.reply(help_text, parse_mode=ParseMode.MARKDOWN)
 
 # ==========================================
 # 9. START BOT / DEFAULT COMMAND (FIXED)
@@ -1314,15 +1315,15 @@ async def send_welcome(client, message: Message):
         if not full_name:
             full_name = "User"
             
-        safe_full_name = full_name.replace('<', '').replace('>', '')
-        username_display = f'<a href="tg://user?id={tg_id}">{safe_full_name}</a>'
+        safe_full_name = full_name.replace('[', '').replace(']', '')
+        username_display = f"[{safe_full_name}](tg://user?id={tg_id})"
         
-        # 🟢 Pyrogram အတွက် <emoji id="..."> သုံးရပါမည်
-        EMOJI_1 = "5956355397366320202" # 🥺
-        EMOJI_2 = "5954097490109140119" # 👤
-        EMOJI_3 = "5958289678837746828" # 🆔
-        EMOJI_4 = "5956330306167376831" # 📊
-        EMOJI_5 = "5954078884310814346" # 📞
+        # 🟢 Pyrogram Markdown အတွက် Premium Emoji Format : ![Emoji](tg://emoji?id=xxxx)
+        EMOJI_1 = "![🥺](tg://emoji?id=5956355397366320202)"
+        EMOJI_2 = "![👤](tg://emoji?id=5954097490109140119)"
+        EMOJI_3 = "![🆔](tg://emoji?id=5958289678837746828)"
+        EMOJI_4 = "![📊](tg://emoji?id=5956330306167376831)"
+        EMOJI_5 = "![📞](tg://emoji?id=5954078884310814346)"
 
         if is_authorized(message):
             status = "🟢 Aᴄᴛɪᴠᴇ"
@@ -1330,14 +1331,14 @@ async def send_welcome(client, message: Message):
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <emoji id='{EMOJI_1}'>🥺</emoji>\n\n"
-            f"<emoji id='{EMOJI_2}'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<emoji id='{EMOJI_3}'>🆔</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<emoji id='{EMOJI_4}'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<emoji id='{EMOJI_5}'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ {EMOJI_1}\n\n"
+            f"{EMOJI_2} Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"{EMOJI_3} 𝐈𝐃: `{tg_id}`\n"
+            f"{EMOJI_4} Sᴛᴀᴛᴜs: {status}\n\n"
+            f"{EMOJI_5} Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
-        await message.reply(welcome_text, parse_mode=ParseMode.HTML)
+        await message.reply(welcome_text, parse_mode=ParseMode.MARKDOWN)
         
     except Exception as e:
         print(f"Start Cmd Error: {e}")
@@ -1349,7 +1350,7 @@ async def send_welcome(client, message: Message):
             f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
             f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
-        await message.reply(fallback_text)
+        await message.reply(fallback_text, parse_mode=ParseMode.MARKDOWN)
 
 
 # ==========================================
