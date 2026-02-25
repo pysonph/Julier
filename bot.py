@@ -121,39 +121,35 @@ DOUBLE_DIAMOND_PACKAGES = {
 
 BR_PACKAGES = {
     '86': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}],
-    '172': [{'pid': '23', 'price': 122.00, 'name': '172 💎'}],
+    '172': [{'pid': '23', 'price': 122.0, 'name': '172 💎'}],
     '257': [{'pid': '25', 'price': 177.5, 'name': '257 💎'}],
-    '706': [{'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '2195': [{'pid': '27', 'price': 1453.00, 'name': '2195 💎'}],
-    '3688': [{'pid': '28', 'price': 2424.00, 'name': '3688 💎'}],
-    '5532': [{'pid': '29', 'price': 3660.00, 'name': '5532 💎'}],
-    '9288': [{'pid': '30', 'price': 6079.00, 'name': '9288 💎'}],
-    '55': [{'pid': '22590', 'price': 39.0, 'name': '50+50 💎'}],
-    '165': [{'pid': '22591', 'price': 116.9, 'name': '150+150 💎'}],
-    '275': [{'pid': '22592', 'price': 187.5, 'name': '250+250 💎'}],
-    '565': [{'pid': '22593', 'price': 385, 'name': '500+500 💎'}],
-    '600': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
     '343': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
-    '429': [{'pid': '23', 'price': 122.00, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
+    '429': [{'pid': '23', 'price': 122.0, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
     '514': [{'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
-    '878': [{'pid': '23', 'price': 122.00, 'name': '172 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '963': [{'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '1049': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '1135': [{'pid': '23', 'price': 122.00, 'name': '172 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '1412': [{'pid': '26', 'price': 480.00, 'name': '706 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '1584': [{'pid': '23', 'price': 122.00, 'name': '172 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '1755': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '2538': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '27', 'price': 1453.00, 'name': '2195 💎'}],
-    '2901': [{'pid': '27', 'price': 1453.00, 'name': '2195 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}],
-    '3244': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.00, 'name': '706 💎'}, {'pid': '27', 'price': 1453.00, 'name': '2195 💎'}],
-    'web': [{'pid': '26555', 'price': 39.00, 'name': 'Elite Weekly Paackage'}],
+    '600': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}],
+    '706': [{'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '878': [{'pid': '23', 'price': 122.0, 'name': '172 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '963': [{'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '1049': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '1135': [{'pid': '23', 'price': 122.0, 'name': '172 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '1412': [{'pid': '26', 'price': 480.0, 'name': '706 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '1584': [{'pid': '23', 'price': 122.0, 'name': '172 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '1755': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '2195': [{'pid': '27', 'price': 1453.0, 'name': '2195 💎'}],
+    '2538': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '27', 'price': 1453.0, 'name': '2195 💎'}],
+    '2901': [{'pid': '27', 'price': 1453.0, 'name': '2195 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}],
+    '3244': [{'pid': '13', 'price': 61.5, 'name': '86 💎'}, {'pid': '25', 'price': 177.5, 'name': '257 💎'}, {'pid': '26', 'price': 480.0, 'name': '706 💎'}, {'pid': '27', 'price': 1453.0, 'name': '2195 💎'}],
+    '3688': [{'pid': '28', 'price': 2424.0, 'name': '3688 💎'}],
+    '5532': [{'pid': '29', 'price': 3660.0, 'name': '5532 💎'}],
+    '9288': [{'pid': '30', 'price': 6079.0, 'name': '9288 💎'}],
     'meb': [{'pid': '26556', 'price': 196.5, 'name': 'Epic Monthly Package'}],
     'tp': [{'pid': '33', 'price': 402.5, 'name': 'Twilight Passage'}],
-    'wp': [{'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp2': [{'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp3': [{'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp4': [{'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp5': [{'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.00, 'name': 'Weekly Pass'}],
+    'web': [{'pid': '26555', 'price': 39.0, 'name': 'Elite Weekly Paackage'}],
+    'wp': [{'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp2': [{'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp3': [{'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp4': [{'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp5': [{'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '16642', 'price': 76.0, 'name': 'Weekly Pass'}],
 }
 
 PH_PACKAGES = {
@@ -165,39 +161,39 @@ PH_PACKAGES = {
 }
 
 MCC_PACKAGES = {
-    '86': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}],
-    '172': [{'pid': '23826', 'price': 125.00, 'name': '172 💎'}],
-    '257': [{'pid': '23827', 'price': 187.00, 'name': '257 💎'}],
+    '86': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}],
+    '172': [{'pid': '23826', 'price': 125.0, 'name': '172 💎'}],
+    '257': [{'pid': '23827', 'price': 187.0, 'name': '257 💎'}],
     '343': [{'pid': '23828', 'price': 250.0, 'name': '343 💎'}],
+    '429': [{'pid': '23826', 'price': 122.0, 'name': '172 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}],
     '516': [{'pid': '23829', 'price': 375.0, 'name': '516 💎'}],
-    '706': [{'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '1346': [{'pid': '23831', 'price': 937.50, 'name': '1346 💎'}],
-    '1825': [{'pid': '23832', 'price': 1250.00, 'name': '1825 💎'}],
-    '2195': [{'pid': '23833', 'price': 1500.00, 'name': '2195 💎'}],
-    '3688': [{'pid': '23834', 'price': 2500.00, 'name': '3688 💎'}],
-    '5532': [{'pid': '23835', 'price': 3750.00, 'name': '5532 💎'}],
-    '9288': [{'pid': '23836', 'price': 6250.00, 'name': '9288 💎'}],
-    'b50': [{'pid': '23837', 'price': 40.0, 'name': '50+50 💎'}],
+    '600': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23827', 'price': 177.5, 'name': '257 💎'}],
+    '706': [{'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '878': [{'pid': '23826', 'price': 125.0, 'name': '172 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '963': [{'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '1049': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '1135': [{'pid': '23826', 'price': 125.0, 'name': '172 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '1346': [{'pid': '23831', 'price': 937.5, 'name': '1346 💎'}],
+    '1412': [{'pid': '23830', 'price': 500.0, 'name': '706 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '1584': [{'pid': '23826', 'price': 125.0, 'name': '172 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}, {'pid': '23830', 'price': 480.0, 'name': '706 💎'}],
+    '1755': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '1825': [{'pid': '23832', 'price': 1250.0, 'name': '1825 💎'}],
+    '2195': [{'pid': '23833', 'price': 1500.0, 'name': '2195 💎'}],
+    '2538': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23833', 'price': 1500.0, 'name': '2195 💎'}],
+    '2901': [{'pid': '23833', 'price': 1500.0, 'name': '2195 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}],
+    '3244': [{'pid': '23825', 'price': 62.5, 'name': '86 💎'}, {'pid': '23827', 'price': 187.0, 'name': '257 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}, {'pid': '23833', 'price': 1500.0, 'name': '2195 💎'}],
+    '3688': [{'pid': '23834', 'price': 2500.0, 'name': '3688 💎'}],
+    '5532': [{'pid': '23835', 'price': 3750.0, 'name': '5532 💎'}],
+    '9288': [{'pid': '23836', 'price': 6250.0, 'name': '9288 💎'}],
     'b150': [{'pid': '23838', 'price': 120.0, 'name': '150+150 💎'}],
     'b250': [{'pid': '23839', 'price': 200.0, 'name': '250+250 💎'}],
+    'b50': [{'pid': '23837', 'price': 40.0, 'name': '50+50 💎'}],
     'b500': [{'pid': '23840', 'price': 400, 'name': '500+500 💎'}],
-    '429': [{'pid': '23826', 'price': 122.00, 'name': '172 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}],
-    '600': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23827', 'price': 177.5, 'name': '257 💎'}],
-    '878': [{'pid': '23826', 'price': 125.00, 'name': '172 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '963': [{'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '1049': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '1135': [{'pid': '23826', 'price': 125.00, 'name': '172 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '1412': [{'pid': '23830', 'price': 500.00, 'name': '706 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '1584': [{'pid': '23826', 'price': 125.00, 'name': '172 💎'}, {'pid': '23830', 'price': 500.0, 'name': '706 💎'}, {'pid': '23830', 'price': 480.00, 'name': '706 💎'}],
-    '1755': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '2538': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23833', 'price': 1500.00, 'name': '2195 💎'}],
-    '2901': [{'pid': '23833', 'price': 1500.00, 'name': '2195 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}],
-    '3244': [{'pid': '23825', 'price': 62.50, 'name': '86 💎'}, {'pid': '23827', 'price': 187.00, 'name': '257 💎'}, {'pid': '23830', 'price': 500.00, 'name': '706 💎'}, {'pid': '23833', 'price': 1500.00, 'name': '2195 💎'}],
-    'wp': [{'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp2': [{'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp3': [{'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp4': [{'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}],
-    'wp5': [{'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.00, 'name': 'Weekly Pass'}],
+    'wp': [{'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp2': [{'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp3': [{'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp4': [{'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}],
+    'wp5': [{'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}, {'pid': '23841', 'price': 76.0, 'name': 'Weekly Pass'}],
 }
 
 # ==========================================
@@ -825,10 +821,10 @@ def handle_check_role(message):
         bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=f"❌ System Error: {str(e)}")
 
 # ==========================================
-# ==========================================
 # 8. 💎 PURCHASE WITH MLBB V-WALLET (AUTO REGION DETECT & HTML UI)
 # ==========================================
-@bot.message_handler(func=lambda message: re.match(r"(?i)^msc\s+\d+", message.text.strip()))
+# ✅ UPDATED: Command မျိုးစုံ (msc, br, ph, b, p, mlb, mlp) ကို လက်ခံပေးထားပါတယ်
+@bot.message_handler(func=lambda message: re.match(r"(?i)^(?:msc|br|ph|mlb|mlp|b|p)\s+\d+", message.text.strip()))
 def handle_direct_buy(message):
     if not is_authorized(message):
         return bot.reply_to(message, f"ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.❌")
@@ -844,27 +840,42 @@ def handle_direct_buy(message):
             for line in lines:
                 line = line.strip()
                 if not line: continue 
-                    
-                match = re.search(r"(?i)^(?:msc\s+)?(\d+)\s*\(\s*(\d+)\s*\)\s*([a-zA-Z0-9_]+)", line)
+                
+                # ✅ UPDATED REGEX: 
+                # 1. Prefixes: msc, br, ph, mlb, mlp, b, p အကုန်လက်ခံသည်
+                # 2. Zone ID: (1234) သို့မဟုတ် 1234 နှစ်မျိုးလုံးရသည်
+                match = re.search(r"(?i)^(?:(?:msc|br|ph|mlb|mlp|b|p)\s+)?(\d+)\s*(?:[\(]?\s*(\d+)\s*[\)]?)\s+([a-zA-Z0-9_]+)", line)
+                
                 if not match:
-                    bot.reply_to(message, f"Invalid format: `{line}`\n(Example - msc 12345678 (1234) wp)")
+                    bot.reply_to(message, f"Invalid format: `{line}`\n(Example: msc 12345678 1234 514 OR br 12345678 (1234) wp)")
                     continue
                     
                 game_id = match.group(1)
                 zone_id = match.group(2)
                 item_input = match.group(3).lower() 
                 
-                # Auto detect Region (BR / PH)
-                if item_input in BR_PACKAGES:
+                # ✅ Package Checking Logic (Region Auto-Detect)
+                currency_name = ''
+                active_packages = {}
+                v_bal_key = ''
+
+                # Priority 1: Double Diamond (Uses BR Balance)
+                if item_input in DOUBLE_DIAMOND_PACKAGES:
+                    currency_name = 'BR'
+                    active_packages = DOUBLE_DIAMOND_PACKAGES
+                    v_bal_key = 'br_balance'
+                # Priority 2: BR Packages (Uses BR Balance)
+                elif item_input in BR_PACKAGES:
                     currency_name = 'BR'
                     active_packages = BR_PACKAGES
                     v_bal_key = 'br_balance'
+                # Priority 3: PH Packages (Uses PH Balance)
                 elif item_input in PH_PACKAGES:
                     currency_name = 'PH'
                     active_packages = PH_PACKAGES
                     v_bal_key = 'ph_balance'
                 else:
-                    bot.reply_to(message, f"No Package found for the selected '{item_input}'.")
+                    bot.reply_to(message, f"❌ No Package found for the selected '{item_input}'.")
                     continue
                     
                 items_to_buy = active_packages[item_input]
@@ -894,7 +905,7 @@ def handle_direct_buy(message):
                 first_order = True
                 
                 for item in items_to_buy:
-                    # Send only 4 parameters as in process_smile_one_order in bot.py
+                    # Send only 4 parameters as in process_smile_one_order
                     result = process_smile_one_order(game_id, zone_id, item['pid'], currency_name)
                     
                     if result['status'] == 'success':
@@ -925,12 +936,11 @@ def handle_direct_buy(message):
                     new_wallet = db.get_reseller(tg_id)
                     new_v_bal = new_wallet.get(v_bal_key, 0.0) if new_wallet else 0.0
                     
-                    # Escape HTML characters to prevent errors
+                    # Escape HTML characters
                     import html
                     safe_ig_name = html.escape(str(ig_name))
                     safe_username = html.escape(str(username_display))
                     
-                    # 👈 Using Blockquote with Aligned Colons
                     report = (
                         f"<blockquote><code>=== ᴛʀᴀɴꜱᴀᴄᴛɪᴏɴ ʀᴇᴘᴏʀᴛ ===\n\n"
                         f"ᴏʀᴅᴇʀ sᴛᴀᴛᴜs : ✅ Sᴜᴄᴄᴇss\n"
@@ -962,9 +972,10 @@ def handle_direct_buy(message):
     except Exception as e:
         bot.reply_to(message, f"System Error: {str(e)}")
 
-                    
 
-# 🌟 NEW: 8.1 MAGIC CHESS V-WALLET ဖြင့် ဝယ်ယူခြင်း 🌟
+# ==========================================
+#  ALSO UPDATING MAGIC CHESS TO SUPPORT NO-PARENTHESES
+# ==========================================
 @bot.message_handler(func=lambda message: re.match(r"(?i)^mcc\s+\d+", message.text.strip()))
 def handle_mcc_buy(message):
     if not is_authorized(message):
@@ -981,10 +992,12 @@ def handle_mcc_buy(message):
             for line in lines:
                 line = line.strip()
                 if not line: continue 
-                    
-                match = re.search(r"(?i)^(?:mcc\s+)?(\d+)\s*\(\s*(\d+)\s*\)\s*([a-zA-Z0-9_]+)", line)
+                
+                # ✅ UPDATED REGEX FOR MCC
+                match = re.search(r"(?i)^(?:mcc\s+)?(\d+)\s*(?:[\(]?\s*(\d+)\s*[\)]?)\s+([a-zA-Z0-9_]+)", line)
+                
                 if not match:
-                    bot.reply_to(message, f"❌ Invalid format: `{line}`\n(Example - mcc 12345678 (1234) 86)", parse_mode="Markdown")
+                    bot.reply_to(message, f"❌ Invalid format: `{line}`\n(Example: mcc 12345678 1234 86)", parse_mode="Markdown")
                     continue
                     
                 game_id, zone_id, item_input = match.group(1), match.group(2), match.group(3).lower()
@@ -995,6 +1008,7 @@ def handle_mcc_buy(message):
                     continue
                     
                 items_to_buy = MCC_PACKAGES[item_input]
+                # ... (Rest of the MCC logic remains the same)
                 total_required_price = sum(item['price'] for item in items_to_buy)
                 
                 user_wallet = db.get_reseller(tg_id)
@@ -1041,7 +1055,6 @@ def handle_mcc_buy(message):
                     now = datetime.datetime.now(MMT)
                     date_str = now.strftime("%m/%d/%Y, %I:%M:%S %p")
                     
-                    # Deduct BR amount since purchase was successful
                     db.update_balance(tg_id, br_amount=-total_spent)
                     
                     new_wallet = db.get_reseller(tg_id)
@@ -1072,11 +1085,12 @@ def handle_mcc_buy(message):
         bot.reply_to(message, f"Sʏsᴛᴇᴍ ᴇʀʀᴏʀ: {str(e)}")
 
 
+
 # ==========================================
-# 11. 📜 PRICE LIST COMMAND (.list / /list)
+# 11. 📜 BR PRICE LIST COMMAND (.listb / /listb)
 # ==========================================
-@bot.message_handler(commands=['list'])
-@bot.message_handler(func=lambda message: message.text.strip().lower() == '.list')
+@bot.message_handler(commands=['listb'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.listb')
 def show_price_list(message):
     if not is_authorized(message):
         return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
@@ -1090,23 +1104,77 @@ def show_price_list(message):
 
     br_list = generate_list(BR_PACKAGES)
     bonus_list = generate_list(DOUBLE_DIAMOND_PACKAGES)
-    ph_list = generate_list(PH_PACKAGES)
-    mcc_list = generate_list(MCC_PACKAGES)
+    #mcc_list = generate_list(MCC_PACKAGES)
 
     response_text = (
-        f"📋 <b>CURRENT PRICE LIST</b>\n\n"
-        f"🇧🇷 <b>BR Packages</b>\n"
-        f"<code>{br_list}</code>\n\n"
-        f"🇧🇷 <b>Double Packages</b>\n"
+        f"🇧🇷 <b>𝘽𝙍 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏</b>\n\n"
+        f"🇧🇷 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
         f"<code>{bonus_list}</code>\n\n"
-        f"🇵🇭 <b>PH Packages</b>\n"
-        f"<code>{ph_list}</code>\n\n"
-        f"♟️ <b>Magic Chess (MCC)</b>\n"
-        f"<code>{mcc_list}</code>"
+        f"🇧🇷 <b>𝘽𝙧 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
+        f"<code>{br_list}</code>"
     )
 
     bot.reply_to(message, response_text, parse_mode="HTML")
 
+
+# 11.1 📜 PH PRICE LIST COMMAND (.listp / /listp)
+# ==========================================
+@bot.message_handler(commands=['listp'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.listp')
+def show_price_list(message):
+    if not is_authorized(message):
+        return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
+
+    def generate_list(package_dict):
+        lines = []
+        for key, items in package_dict.items():
+            total_price = sum(item['price'] for item in items)
+            lines.append(f"{key:<5} : ${total_price:,.2f}")
+        return "\n".join(lines)
+
+    ph_list = generate_list(PH_PACKAGES)
+    #bonus_list = generate_list(DOUBLE_DIAMOND_PACKAGES)
+    #mcc_list = generate_list(MCC_PACKAGES)
+
+    response_text = (
+        f"🇵🇭 <b>𝙋𝙃 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏𝙎</b>\n\n"
+        #f"🇵🇭 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
+        #f"<code>{bonus_list}</code>\n\n"
+        f"🇵🇭 <b>𝙋𝙝 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
+        f"<code>{ph_list}</code>"
+    )
+
+    bot.reply_to(message, response_text, parse_mode="HTML")
+
+
+# 11.2 📜 BR MCC PRICE LIST COMMAND (.listmb / /listmb)
+# ==========================================
+@bot.message_handler(commands=['listmb'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.listmb')
+def show_price_list(message):
+    if not is_authorized(message):
+        return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
+
+    def generate_list(package_dict):
+        lines = []
+        for key, items in package_dict.items():
+            total_price = sum(item['price'] for item in items)
+            lines.append(f"{key:<5} : ${total_price:,.2f}")
+        return "\n".join(lines)
+
+    #br_list = generate_list(BR_PACKAGES)
+    #bonus_list = generate_list(DOUBLE_DIAMOND_PACKAGES)
+    mcc_list = generate_list(MCC_PACKAGES)
+
+    response_text = (
+        f"🇧🇷 <b>𝘽𝙍 𝙈𝘾𝘾 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏</b>\n\n"
+       # f"🇧🇷 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
+        #f"<code>{bonus_list}</code>\n\n"
+        f"🇧🇷 <b>𝙈𝘾𝘾 𝙋𝘼𝘾𝙆𝘼𝙂𝙀𝙎</b>\n"
+        f"<code>{mcc_list}</code>"
+    )
+
+    bot.reply_to(message, response_text, parse_mode="HTML")
 
 # ==========================================
 # 10. 💓 HEARTBEAT FUNCTION
@@ -1154,11 +1222,11 @@ def send_welcome(message):
             
         # FIX: <emoji id='...'> ကို <tg-emoji emoji-id='...'> သို့ ပြောင်းထားသည်
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='6325625905108490795'>🥺</tg-emoji>\n\n"
-            f"<tg-emoji emoji-id='6325666711592769876'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<tg-emoji emoji-id='6325825028382267798'>👤</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<tg-emoji emoji-id='6325338795134687761'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<tg-emoji emoji-id='6325466441562724852'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='6325625905108490795'>🙂</tg-emoji>\n\n"
+            f"<tg-emoji emoji-id='6325666711592769876'>❤️</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<tg-emoji emoji-id='6325825028382267798'>❤️</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<tg-emoji emoji-id='6325338795134687761'>❤️</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<tg-emoji emoji-id='6325466441562724852'>❤️</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
@@ -1193,5 +1261,5 @@ if __name__ == '__main__':
     print("Bot is successfully running (With MongoDB Virtual Wallet & Magic Chess System)...")
     bot.infinity_polling()
     
-    
+DOUBLE_DIAMOND_PACKAGES ကိုခွဲထုတ်ထးလို့ဝယ်လို့ရအောင်ပြင်ပေး။ပြီးတော့ msc 123456789 1234 514 and msc 123456789 (1234) 514 ကွင်းစကွင်းပိတ်မပါလဲ ဝယ်လို့ရအောင်ပြင်ပေး
  
