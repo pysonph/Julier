@@ -1372,7 +1372,7 @@ def send_welcome(message):
             f"<tg-emoji emoji-id='{EMOJI_2}'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
             f"<tg-emoji emoji-id='{EMOJI_3}'>🆔</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
             f"<tg-emoji emoji-id='{EMOJI_4}'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<tg-emoji emoji-id='{EMOJI_5}'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @iwillgoforwardsalone"
+            f"<tg-emoji emoji-id='{EMOJI_5}'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
@@ -1386,7 +1386,7 @@ def send_welcome(message):
             f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
             f"🆔 𝐈𝐃: `{tg_id}`\n"
             f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
-            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @iwillgoforwardsalone"
+            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         bot.reply_to(message, fallback_text, parse_mode="Markdown")
 
