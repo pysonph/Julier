@@ -1291,6 +1291,7 @@ async def send_help_message(client, message: Message):
         f"<b>👤 𝐔𝐬𝐞𝐫 𝐓𝐨𝐨𝐥𝐬</b>\n"
         f"🔹 <code>.balance</code>  : Check Wallet Balance\n"
         f"🔹 <code>.his</code>      : View Order History\n"
+        f"🔹 <code>.clean</code>      : clean Order History\n"
         f"🔹 <code>.listb</code>     : View Price List\n"
         f"🔹 <code>.listp</code>     : View Price List\n"
         f"🔹 <code>.listmb</code>     : View Price List\n"
