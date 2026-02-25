@@ -24,7 +24,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 API_ID = int(os.getenv('API_ID', 123456))  
 API_HASH = os.getenv('API_HASH', "your_api_hash_here") 
-OWNER_ID = int(os.getenv('OWNER_ID', 8197491717) 
+OWNER_ID = int(os.getenv('OWNER_ID', 8197491717))
 FB_EMAIL = os.getenv('FB_EMAIL')
 FB_PASS = os.getenv('FB_PASS')
 
