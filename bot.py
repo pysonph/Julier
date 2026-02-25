@@ -1353,17 +1353,26 @@ def send_welcome(message):
         safe_full_name = full_name.replace('<', '').replace('>', '')
         username_display = f'<a href="tg://user?id={tg_id}">{safe_full_name}</a>'
         
+        # 🟢 [Premium Emoji ID များ ထည့်သွင်းရန်] 🟢
+        # အောက်ပါ ID ဂဏန်းများကို မိမိရှာထားသော Custom Emoji ID အမှန်များဖြင့် အစားထိုးပါ
+        EMOJI_1 = "5956355397366320202" # 🥺
+        EMOJI_2 = "5954097490109140119" # 👤
+        EMOJI_3 = "5958289678837746828" # 🆔
+        EMOJI_4 = "5956330306167376831" # 📊
+        EMOJI_5 = "5954078884310814346" # 📞
+
         if is_authorized(message):
             status = "🟢 Aᴄᴛɪᴠᴇ"
         else:
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
+        # telebot အတွက် <tg-emoji emoji-id="xxx"> ကို သုံးရပါမည်
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
-            f"Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"𝐈𝐃: <code>{tg_id}</code>\n"
-            f"Sᴛᴀᴛᴜs: {status}\n\n"
-            f"Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='{EMOJI_1}'>🥺</tg-emoji>\n\n"
+            f"<tg-emoji emoji-id='{EMOJI_2}'>👤</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<tg-emoji emoji-id='{EMOJI_3}'>🆔</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<tg-emoji emoji-id='{EMOJI_4}'>📊</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<tg-emoji emoji-id='{EMOJI_5}'>📞</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @iwillgoforwardsalone"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
@@ -1377,10 +1386,9 @@ def send_welcome(message):
             f"👤 Usᴇʀɴᴀᴍᴇ: {full_name}\n"
             f"🆔 𝐈𝐃: `{tg_id}`\n"
             f"📊 Sᴛᴀᴛᴜs: {status}\n\n"
-            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"📞 Cᴏɴᴛᴀᴄᴛ ᴜs: @iwillgoforwardsalone"
         )
         bot.reply_to(message, fallback_text, parse_mode="Markdown")
-
 
 # ==========================================
 # 10. RUN BOT
