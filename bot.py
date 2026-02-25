@@ -1,5 +1,6 @@
 import os
 import re
+import io
 import datetime
 import cloudscraper
 from bs4 import BeautifulSoup
@@ -594,7 +595,7 @@ async def send_order_history(client, message: Message):
     tg_id = str(message.from_user.id)
     user_name = message.from_user.username or message.from_user.first_name
     
-    history_data = await db.get_user_history(tg_id, limit=5)
+    history_data = await db.get_user_history(tg_id, limit=200)
     
     if not history_data:
         return await message.reply("📜 **No Order History Found.**")
@@ -613,7 +614,29 @@ async def send_order_history(client, message: Message):
             f"────────────────\n"
         )
     
-    await message.reply(response_text)
+    file_obj = io.BytesIO(response_text.encode('utf-8'))
+    file_obj.name = f"History_{tg_id}.txt"
+    
+    await message.reply_document(
+        document=file_obj,
+        caption=f"📜 **Order History**\n👤 User: @{user_name}\n📊 Records: {len(history_data)} (Max: 200)"
+    )
+
+# 🧹 CLEAN HISTORY COMMAND (.clean / /clean)
+
+@app.on_message(filters.command("clean") | filters.regex(r"(?i)^\.clean$"))
+async def clean_order_history(client, message: Message):
+    if not await is_authorized(message):
+        return await message.reply("ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
+
+    tg_id = str(message.from_user.id)
+    
+    deleted_count = await db.clear_user_history(tg_id)
+    
+    if deleted_count > 0:
+        await message.reply(f"🗑️ **History Cleaned Successfully.**\nDeleted {deleted_count} order records from your history.")
+    else:
+        await message.reply("📜 **No Order History Found to Clean.**")
 
 
 # ==========================================
