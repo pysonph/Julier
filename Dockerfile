@@ -5,8 +5,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN apt-get update -y && apt-get upgrade -y \
     && pip3 install -U pip \
-    && pip3 install -U -r requirements.txt --no-cache-dir
-#RUN pip install --no-cache-dir -r requirements.txt
+    && pip3 install -U -r requirements.txt --no-cache-dir \
+    # Clean up apt cache
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 
 RUN playwright install chromium
 
