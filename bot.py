@@ -2,6 +2,7 @@ import os
 import telebot
 import re
 import datetime
+#from pyrogram.enums import ParseMode
 import cloudscraper
 from bs4 import BeautifulSoup
 import json
@@ -586,6 +587,44 @@ def check_balance_command(message):
         bot.reply_to(message, report)
 
 
+
+# ==========================================
+# 📜 HISTORY COMMAND (.his / /history)
+# ==========================================
+@bot.message_handler(commands=['history'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.his')
+def send_order_history(message):
+    if not is_authorized(message):
+        return bot.reply_to(message, "ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
+
+    tg_id = str(message.from_user.id)
+    user_name = message.from_user.username or message.from_user.first_name
+    
+    # Database မှ နောက်ဆုံး 5 ခုကို ဆွဲထုတ်မည်
+    history_data = db.get_user_history(tg_id, limit=5)
+    
+    if not history_data:
+        return bot.reply_to(message, "📜 **No Order History Found.**", parse_mode="Markdown")
+
+    # Header
+    response_text = f"==== Order History for @{user_name} ====\n\n"
+    
+    # Loop through each order and format it
+    for order in history_data:
+        response_text += (
+            f"🆔 Game ID: {order['game_id']}\n"
+            f"🌏 Zone ID: {order['zone_id']}\n"
+            f"💎 Pack: {order['item_name']}\n"
+            f"🆔 Order ID: {order['order_id']}\n"
+            f"📅 Date: {order['date_str']}\n"
+            f"💲 Rate: ${order['price']:,.2f}\n"
+            f"📊 Status: {order['status']}\n"
+            f"────────────────\n"
+        )
+    
+    bot.reply_to(message, response_text)
+
+
 # ==========================================
 # 6. 📌 ACTIVATION CODE FOR VIRTUAL WALLET (.topup AUTO DETECT)
 # ==========================================
@@ -823,9 +862,9 @@ def handle_check_role(message):
 # ==========================================
 # 8. 💎 PURCHASE WITH MLBB V-WALLET (AUTO REGION DETECT & HTML UI)
 # ==========================================
-# ✅ UPDATED: Command မျိုးစုံ (msc, br, ph, b, p, mlb, mlp) ကို လက်ခံပေးထားပါတယ်
 @bot.message_handler(func=lambda message: re.match(r"(?i)^(?:msc|br|ph|mlb|mlp|b|p)\s+\d+", message.text.strip()))
 def handle_direct_buy(message):
+    # 1. Check Authorization
     if not is_authorized(message):
         return bot.reply_to(message, f"ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.❌")
 
@@ -836,40 +875,38 @@ def handle_direct_buy(message):
         telegram_user = message.from_user.username
         username_display = f"@{telegram_user}" if telegram_user else tg_id
         
-        with transaction_lock: # 👈 Mandatory for V-Wallet
+        # 2. Transaction Lock (To prevent double spending)
+        with transaction_lock: 
             for line in lines:
                 line = line.strip()
                 if not line: continue 
                 
                 # ✅ UPDATED REGEX: 
-                # 1. Prefixes: msc, br, ph, mlb, mlp, b, p အကုန်လက်ခံသည်
-                # 2. Zone ID: (1234) သို့မဟုတ် 1234 နှစ်မျိုးလုံးရသည်
+                # - Handles prefixes: msc, br, ph, mlb, mlp, b, p
+                # - Handles Zone ID: 1234 OR (1234)
                 match = re.search(r"(?i)^(?:(?:msc|br|ph|mlb|mlp|b|p)\s+)?(\d+)\s*(?:[\(]?\s*(\d+)\s*[\)]?)\s+([a-zA-Z0-9_]+)", line)
                 
                 if not match:
-                    bot.reply_to(message, f"Invalid format: `{line}`\n(Example: msc 12345678 1234 514 OR br 12345678 (1234) wp)")
+                    bot.reply_to(message, f"Invalid format: `{line}`\n(Example: msc 12345678 1234 11 OR br 12345678 (1234) wp)")
                     continue
                     
                 game_id = match.group(1)
                 zone_id = match.group(2)
                 item_input = match.group(3).lower() 
                 
-                # ✅ Package Checking Logic (Region Auto-Detect)
+                # ✅ Package Checking Logic (Priority: Double > BR > PH)
                 currency_name = ''
                 active_packages = {}
                 v_bal_key = ''
 
-                # Priority 1: Double Diamond (Uses BR Balance)
                 if item_input in DOUBLE_DIAMOND_PACKAGES:
                     currency_name = 'BR'
                     active_packages = DOUBLE_DIAMOND_PACKAGES
                     v_bal_key = 'br_balance'
-                # Priority 2: BR Packages (Uses BR Balance)
                 elif item_input in BR_PACKAGES:
                     currency_name = 'BR'
                     active_packages = BR_PACKAGES
                     v_bal_key = 'br_balance'
-                # Priority 3: PH Packages (Uses PH Balance)
                 elif item_input in PH_PACKAGES:
                     currency_name = 'PH'
                     active_packages = PH_PACKAGES
@@ -881,7 +918,7 @@ def handle_direct_buy(message):
                 items_to_buy = active_packages[item_input]
                 total_required_price = sum(item['price'] for item in items_to_buy)
                 
-                # Check V-Wallet Balance
+                # 3. Check V-Wallet Balance
                 user_wallet = db.get_reseller(tg_id)
                 user_v_bal = user_wallet.get(v_bal_key, 0.0) if user_wallet else 0.0
                 
@@ -904,8 +941,8 @@ def handle_direct_buy(message):
                 error_msg = ""
                 first_order = True
                 
+                # 4. Processing Orders
                 for item in items_to_buy:
-                    # Send only 4 parameters as in process_smile_one_order
                     result = process_smile_one_order(game_id, zone_id, item['pid'], currency_name)
                     
                     if result['status'] == 'success':
@@ -923,20 +960,34 @@ def handle_direct_buy(message):
                         error_msg = result['message']
                         break 
                 
+                # 5. Post-Processing (Success)
                 if success_count > 0:
                     now = datetime.datetime.now(MMT)
                     date_str = now.strftime("%m/%d/%Y, %I:%M:%S %p")
                     
-                    # Deduct spent amount from V-Wallet
+                    # A. Deduct Balance
                     if currency_name == 'BR':
                         db.update_balance(tg_id, br_amount=-total_spent)
                     else:
                         db.update_balance(tg_id, ph_amount=-total_spent)
                     
+                    # B. Fetch Updated Balance
                     new_wallet = db.get_reseller(tg_id)
                     new_v_bal = new_wallet.get(v_bal_key, 0.0) if new_wallet else 0.0
+
                     
-                    # Escape HTML characters
+                    final_order_ids = order_ids_str.strip().replace('\n', ', ')
+                    
+                    db.save_order(
+                        tg_id=tg_id,
+                        game_id=game_id,
+                        zone_id=zone_id,
+                        item_name=item_input,
+                        price=total_spent,
+                        order_id=final_order_ids,
+                        status="success"
+                    )
+                 
                     import html
                     safe_ig_name = html.escape(str(ig_name))
                     safe_username = html.escape(str(username_display))
@@ -965,19 +1016,22 @@ def handle_direct_buy(message):
                     )
                     
                     if fail_count > 0:
-                        bot.reply_to(message, f"Only partially successful.\nError: {error_msg}")
+                        bot.reply_to(message, f"⚠️ Only partially successful.\nError: {error_msg}")
                 else:
+                    # 6. Post-Processing (Failure)
                     bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=f"❌ Order failed:\n{error_msg}")
 
     except Exception as e:
         bot.reply_to(message, f"System Error: {str(e)}")
 
 
+
 # ==========================================
-#  ALSO UPDATING MAGIC CHESS TO SUPPORT NO-PARENTHESES
+# 🌟 NEW: 8.1 MAGIC CHESS V-WALLET ဖြင့် ဝယ်ယူခြင်း 🌟
 # ==========================================
 @bot.message_handler(func=lambda message: re.match(r"(?i)^mcc\s+\d+", message.text.strip()))
 def handle_mcc_buy(message):
+    # 1. Check Authorization
     if not is_authorized(message):
         return bot.reply_to(message, f"ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.", parse_mode="Markdown")
 
@@ -988,29 +1042,33 @@ def handle_mcc_buy(message):
         telegram_user = message.from_user.username
         username_display = f"@{telegram_user}" if telegram_user else tg_id
         
+        # 2. Transaction Lock
         with transaction_lock:
             for line in lines:
                 line = line.strip()
                 if not line: continue 
                 
                 # ✅ UPDATED REGEX FOR MCC
+                # Supports: mcc 123456 1234 86 OR mcc 123456 (1234) 86
                 match = re.search(r"(?i)^(?:mcc\s+)?(\d+)\s*(?:[\(]?\s*(\d+)\s*[\)]?)\s+([a-zA-Z0-9_]+)", line)
                 
                 if not match:
                     bot.reply_to(message, f"❌ Invalid format: `{line}`\n(Example: mcc 12345678 1234 86)", parse_mode="Markdown")
                     continue
                     
-                game_id, zone_id, item_input = match.group(1), match.group(2), match.group(3).lower()
+                game_id = match.group(1)
+                zone_id = match.group(2)
+                item_input = match.group(3).lower()
                 
-                # Magic Chess uses BR Package only
+                # 3. Check Package (Magic Chess usually uses BR Package only)
                 if item_input not in MCC_PACKAGES:
                     bot.reply_to(message, f"❌ No Magic Chess Package found for '{item_input}'.")
                     continue
                     
                 items_to_buy = MCC_PACKAGES[item_input]
-                # ... (Rest of the MCC logic remains the same)
                 total_required_price = sum(item['price'] for item in items_to_buy)
                 
+                # 4. Check V-Wallet Balance (BR Balance)
                 user_wallet = db.get_reseller(tg_id)
                 user_v_bal = user_wallet.get('br_balance', 0.0) if user_wallet else 0.0
                 
@@ -1033,6 +1091,7 @@ def handle_mcc_buy(message):
                 error_msg = ""
                 first_order = True
                 
+                # 5. Process Orders
                 for item in items_to_buy:
                     result = process_mcc_order(game_id, zone_id, item['pid'])
                     
@@ -1043,7 +1102,7 @@ def handle_mcc_buy(message):
                         
                         success_count += 1
                         total_spent += item['price']
-                        order_ids_str += f"`{result['order_id']}`\n"
+                        order_ids_str += f"{result['order_id']}\n"
                         
                         time.sleep(random.randint(5, 10)) 
                     else:
@@ -1051,38 +1110,64 @@ def handle_mcc_buy(message):
                         error_msg = result['message']
                         break 
                 
+                # 6. Post-Processing
                 if success_count > 0:
                     now = datetime.datetime.now(MMT)
                     date_str = now.strftime("%m/%d/%Y, %I:%M:%S %p")
                     
+                    # A. Deduct BR amount
                     db.update_balance(tg_id, br_amount=-total_spent)
                     
+                    # B. Get New Balance
                     new_wallet = db.get_reseller(tg_id)
                     new_v_bal = new_wallet.get('br_balance', 0.0) if new_wallet else 0.0
                     
-                    report = f"**MCC {game_id} ({zone_id}) {item_input}**\n"
-                    report += "=== ᴛʀᴀɴsᴀᴄᴛɪᴏɴ ʀᴇᴘᴏʀᴛ ===\n\n"
-                    report += "ᴏʀᴅᴇʀ sᴛᴀᴛᴜs: ✅ Sᴜᴄᴄᴇss\n"
-                    report += f"ɢᴀᴍᴇ: ᴍᴀɢɪᴄ ᴄʜᴇss ɢᴏ ɢᴏ\n"
-                    report += f"ɢᴀᴍᴇ ɪᴅ: {game_id} {zone_id}\n"
-                    report += f"ɪɢ ɴᴀᴍᴇ: {ig_name}\n"
-                    report += f"ᴏʀᴅᴇʀ ɪᴅ:\n{order_ids_str}"
-                    report += f"ɪᴛᴇᴍ: {item_input} 💎\n"
-                    report += f"ᴛᴏᴛᴀʟ ᴀᴍᴏᴜɴᴛ: {total_spent:.2f} 🪙\n\n"
-                    report += f"ᴅᴀᴛᴇ: {date_str}\n"
-                    report += f"ᴜsᴇʀɴᴀᴍᴇ: {username_display}\n"
-                    report += f"ᴛᴏᴛᴀʟ sᴘᴇɴᴛ: ${total_spent:.2f}\n"
-                    report += f"ɪɴɪᴛɪᴀʟ ʙᴀʟᴀɴᴄᴇ: ${user_v_bal:.2f}\n"
-                    report += f"ғɪɴᴀʟ ʙᴀʟᴀɴᴄᴇ: ${new_v_bal:.2f}\n\n"
-                    report += f"Sᴜᴄᴄᴇss {success_count} / Fᴀɪʟ {fail_count}" 
+                   
+                    final_order_ids = order_ids_str.strip().replace('\n', ', ')
+                    
+                    db.save_order(
+                        tg_id=tg_id,
+                        game_id=game_id,
+                        zone_id=zone_id,
+                        item_name=item_input,
+                        price=total_spent,
+                        order_id=final_order_ids,
+                        status="success"
+                    )
 
-                    bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=report, parse_mode="Markdown")
-                    if fail_count > 0: bot.reply_to(message, f"⚠️ Only partially successful.\nError: {error_msg}")
+                 
+                    import html
+                    safe_ig_name = html.escape(str(ig_name))
+                    safe_username = html.escape(str(username_display))
+
+                    report = (
+                        f"<blockquote><code>**MCC {game_id} ({zone_id}) {item_input}**\n"
+                        f"=== ᴛʀᴀɴsᴀᴄᴛɪᴏɴ ʀᴇᴘᴏʀᴛ ===\n\n"
+                        f"ᴏʀᴅᴇʀ sᴛᴀᴛᴜs: ✅ Sᴜᴄᴄᴇss\n"
+                        f"ɢᴀᴍᴇ: ᴍᴀɢɪᴄ ᴄʜᴇss ɢᴏ ɢᴏ\n"
+                        f"ɢᴀᴍᴇ ɪᴅ: {game_id} {zone_id}\n"
+                        f"ɪɢ ɴᴀᴍᴇ: {safe_ig_name}\n"
+                        f"ᴏʀᴅᴇʀ ɪᴅ:\n{order_ids_str.strip()}\n"
+                        f"ɪᴛᴇᴍ: {item_input} 💎\n"
+                        f"ᴛᴏᴛᴀʟ ᴀᴍᴏᴜɴᴛ: {total_spent:.2f} 🪙\n\n"
+                        f"ᴅᴀᴛᴇ: {date_str}\n"
+                        f"ᴜsᴇʀɴᴀᴍᴇ: {safe_username}\n"
+                        f"ᴛᴏᴛᴀʟ sᴘᴇɴᴛ: ${total_spent:.2f}\n"
+                        f"ɪɴɪᴛɪᴀʟ ʙᴀʟᴀɴᴄᴇ: ${user_v_bal:.2f}\n"
+                        f"ғɪɴᴀʟ ʙᴀʟᴀɴᴄᴇ: ${new_v_bal:.2f}\n\n"
+                        f"Sᴜᴄᴄᴇss {success_count} / Fᴀɪʟ {fail_count}</code></blockquote>" 
+                    )
+
+                    bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=report, parse_mode="HTML")
+                    
+                    if fail_count > 0: 
+                        bot.reply_to(message, f"⚠️ Only partially successful.\nError: {error_msg}")
                 else:
                     bot.edit_message_text(chat_id=message.chat.id, message_id=loading_msg.message_id, text=f"Oʀᴅᴇʀ ғᴀɪʟ❌\n{error_msg}")
 
     except Exception as e:
         bot.reply_to(message, f"Sʏsᴛᴇᴍ ᴇʀʀᴏʀ: {str(e)}")
+
 
 
 
@@ -1107,7 +1192,6 @@ def show_price_list(message):
     #mcc_list = generate_list(MCC_PACKAGES)
 
     response_text = (
-        f"🇧🇷 <b>𝘽𝙍 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏</b>\n\n"
         f"🇧🇷 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
         f"<code>{bonus_list}</code>\n\n"
         f"🇧🇷 <b>𝘽𝙧 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
@@ -1137,7 +1221,6 @@ def show_price_list(message):
     #mcc_list = generate_list(MCC_PACKAGES)
 
     response_text = (
-        f"🇵🇭 <b>𝙋𝙃 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏𝙎</b>\n\n"
         #f"🇵🇭 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
         #f"<code>{bonus_list}</code>\n\n"
         f"🇵🇭 <b>𝙋𝙝 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
@@ -1167,7 +1250,6 @@ def show_price_list(message):
     mcc_list = generate_list(MCC_PACKAGES)
 
     response_text = (
-        f"🇧🇷 <b>𝘽𝙍 𝙈𝘾𝘾 𝙋𝘼𝘾𝙆𝘼𝙂𝙀 𝙋𝙍𝙄𝘾𝙀 𝙇𝙄𝙎𝙏</b>\n\n"
        # f"🇧🇷 <b>𝘿𝙤𝙪𝙗𝙡𝙚 𝙋𝙖𝙘𝙠𝙖𝙜𝙚𝙨</b>\n"
         #f"<code>{bonus_list}</code>\n\n"
         f"🇧🇷 <b>𝙈𝘾𝘾 𝙋𝘼𝘾𝙆𝘼𝙂𝙀𝙎</b>\n"
@@ -1197,6 +1279,63 @@ def keep_cookie_alive():
                 auto_login_and_get_cookie()
         except: pass
 
+
+# ==========================================
+# ℹ️ HELP COMMAND (.help / /help)
+# ==========================================
+@bot.message_handler(commands=['help'])
+@bot.message_handler(func=lambda message: message.text.strip().lower() == '.help')
+def send_help_message(message):
+    # Owner ဟုတ်မဟုတ် စစ်ဆေးခြင်း (Admin Command များကို Owner ပဲမြင်ရမည်)
+    is_owner = (message.from_user.id == OWNER_ID)
+
+    # Header Design
+    help_text = (
+        f"<b>🤖 𝐁𝐎𝐓 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐌𝐄𝐍𝐔</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+    )
+
+    help_text += (
+        f"<b>💎 𝐌𝐋𝐁Ｂ 𝐃𝐢𝐚𝐦𝐨𝐧𝐝𝐬</b>\n"
+        f"<blockquote><code>msc ID (Zone) Pack</code></blockquote>\n"
+        f"Ex: <code>msc 12345678 12345 172</code>\n"
+        f"<i>(command : msc, br, ph, mlb, mlp)</i>\n\n"
+
+        f"<b>♟️ 𝐌𝐚𝐠𝐢𝐜 𝐂𝐡𝐞𝐬𝐬</b>\n"
+        f"<blockquote><code>mcc ID (Zone) Pack</code></blockquote>\n"
+        f"Ex: <code>mcc 12345678 1234 86</code>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+    )
+
+    # 2. 👤 USER TOOLS (သာမန်အသုံးပြုသူများအတွက်)
+    help_text += (
+        f"<b>👤 𝐔𝐬𝐞𝐫 𝐓𝐨𝐨𝐥𝐬</b>\n"
+        f"🔹 <code>.balance</code>  : Check Wallet Balance\n"
+        f"🔹 <code>.his</code>      : View Order History\n"
+        f"🔹 <code>.listb</code>     : View Price List\n"
+        f"🔹 <code>.listp</code>     : View Price List\n"
+        f"🔹 <code>.listmb</code>     : View Price List\n"
+        f"🔹 <code>.role ID (Zone)</code> : Check IGN\n"
+        f"🔹 <code>.topup Code</code> : Redeem Voucher\n\n"
+    )
+
+    # 3. 👑 OWNER COMMANDS (ပိုင်ရှင်အတွက်သာ)
+    if is_owner:
+        help_text += (
+            f"<b>👑 𝐎𝐰𝐧𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬</b>\n"
+            f"🔸 <code>/add ID</code>    : Add User\n"
+            f"🔸 <code>/remove ID</code> : Remove User\n"
+            f"🔸 <code>/users</code>     : User List\n"
+            f"🔸 <code>/setcookie</code> : Update Cookie\n"
+        )
+        
+    help_text += f"━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    # Message ပို့မည်
+    bot.reply_to(message, help_text, parse_mode="HTML")
+
+
+
 # ==========================================
 # 9. START BOT / DEFAULT COMMAND (FIXED)
 # ==========================================
@@ -1220,13 +1359,18 @@ def send_welcome(message):
         else:
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
-        # FIX: <emoji id='...'> ကို <tg-emoji emoji-id='...'> သို့ ပြောင်းထားသည်
+        PREMIUM_EMOJI_1 = "6120465303177533732"
+        PREMIUM_EMOJI_2 = "6205967094039709231"
+        PREMIUM_EMOJI_3 = "6206217069726271155"
+        PREMIUM_EMOJI_4 = "6204129896009042249"
+        PREMIUM_EMOJI_5 = "6206275004540126842"
+        
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <tg-emoji emoji-id='6325625905108490795'>🙂</tg-emoji>\n\n"
-            f"<tg-emoji emoji-id='6325666711592769876'>❤️</tg-emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<tg-emoji emoji-id='6325825028382267798'>❤️</tg-emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<tg-emoji emoji-id='6325338795134687761'>❤️</tg-emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<tg-emoji emoji-id='6325466441562724852'>❤️</tg-emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ <emoji id="{PREMIUM_EMOJI_1}">🥺</emoji>\n\n"
+            f"<emoji id="{PREMIUM_EMOJI_2}">😂</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"<emoji id="{PREMIUM_EMOJI_3}">😂</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
+            f"<emoji id="{PREMIUM_EMOJI_4}">😂</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
+            f"<emoji id="{PREMIUM_EMOJI_5}">😂</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
