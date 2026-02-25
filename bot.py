@@ -1350,8 +1350,7 @@ def send_welcome(message):
         if not full_name:
             full_name = "User"
             
-        # HTML Special Characters တွေကို escape လုပ်ပေးရပါမယ် (User နာမည်မှာ < > ပါရင် Error တက်တတ်လို့ပါ)
-        safe_full_name = full_name.replace('<', '&lt;').replace('>', '&gt;')
+        safe_full_name = full_name.replace('<', '').replace('>', '')
         username_display = f'<a href="tg://user?id={tg_id}">{safe_full_name}</a>'
         
         if is_authorized(message):
@@ -1359,18 +1358,12 @@ def send_welcome(message):
         else:
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
             
-        PREMIUM_EMOJI_1 = "6120465303177533732"
-        PREMIUM_EMOJI_2 = "6205967094039709231"
-        PREMIUM_EMOJI_3 = "6206217069726271155"
-        PREMIUM_EMOJI_4 = "6204129896009042249"
-        PREMIUM_EMOJI_5 = "6206275004540126842"
-        
         welcome_text = (
-            f"ʜᴇʏ ʙᴀʙʏ <emoji id="{PREMIUM_EMOJI_1}">🥺</emoji>\n\n"
-            f"<emoji id="{PREMIUM_EMOJI_2}">😂</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
-            f"<emoji id="{PREMIUM_EMOJI_3}">😂</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
-            f"<emoji id="{PREMIUM_EMOJI_4}">😂</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<emoji id="{PREMIUM_EMOJI_5}">😂</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"ʜᴇʏ ʙᴀʙʏ 🥺\n\n"
+            f"Usᴇʀɴᴀᴍᴇ: {username_display}\n"
+            f"𝐈𝐃: <code>{tg_id}</code>\n"
+            f"Sᴛᴀᴛᴜs: {status}\n\n"
+            f"Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
         )
         
         bot.reply_to(message, welcome_text, parse_mode="HTML")
