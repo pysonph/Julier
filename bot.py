@@ -1,6 +1,7 @@
+#wanglin.py
+import io
 import os
 import re
-import io
 import datetime
 import cloudscraper
 from bs4 import BeautifulSoup
@@ -10,6 +11,7 @@ import asyncio
 from playwright.async_api import async_playwright
 import html
 
+# 🟢 Pyrogram Imports
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.enums import ParseMode
@@ -24,7 +26,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 API_ID = int(os.getenv('API_ID', 123456))  
 API_HASH = os.getenv('API_HASH', "your_api_hash_here") 
-OWNER_ID = int(os.getenv('OWNER_ID', 8197491717))
+OWNER_ID = int(os.getenv('OWNER_ID', 8197491717)) 
 FB_EMAIL = os.getenv('FB_EMAIL')
 FB_PASS = os.getenv('FB_PASS')
 
@@ -304,6 +306,18 @@ async def process_smile_one_order(game_id, zone_id, product_id, currency_name):
                 else: return {"status": "error", "message": "❌ Auto-Login failed. Please provide /setcookie again."}
             return {"status": "error", "message": "❌ **Invalid Account:**\nAccount is ban server."}
 
+        # 🟢 [အသစ်ထည့်ထားသောအပိုင်း] Payment မလုပ်ခင် နောက်ဆုံး Order ID အဟောင်းကို ရှာထားမည်
+        last_known_order_id = None
+        try:
+            pre_hist_raw = await asyncio.to_thread(scraper.get, order_api_url, params={'type': 'orderlist', 'p': '1', 'pageSize': '5'}, headers=headers)
+            pre_hist_json = pre_hist_raw.json()
+            if 'list' in pre_hist_json and len(pre_hist_json['list']) > 0:
+                for order in pre_hist_json['list']:
+                    if str(order.get('user_id')) == str(game_id) and str(order.get('server_id')) == str(zone_id):
+                        last_known_order_id = str(order.get('increment_id', ""))
+                        break
+        except Exception: pass
+
         pay_data = {'_csrf': csrf_token, 'user_id': game_id, 'zone_id': zone_id, 'pay_methond': 'smilecoin', 'product_id': product_id, 'channel_method': 'smilecoin', 'flowid': flowid, 'email': '', 'coupon_id': ''}
         pay_response_raw = await asyncio.to_thread(scraper.post, pay_url, data=pay_data, headers=headers)
         pay_text = pay_response_raw.text.lower()
@@ -315,16 +329,19 @@ async def process_smile_one_order(game_id, zone_id, product_id, currency_name):
         real_order_id = "Not found"
         is_success = False
 
+        # 🟢 [ပြင်ဆင်ထားသောအပိုင်း] ပြေစာအသစ်ဖြစ်မှသာ Success သတ်မှတ်မည်
         try:
             hist_res_raw = await asyncio.to_thread(scraper.get, order_api_url, params={'type': 'orderlist', 'p': '1', 'pageSize': '5'}, headers=headers)
             hist_json = hist_res_raw.json()
             if 'list' in hist_json and len(hist_json['list']) > 0:
                 for order in hist_json['list']:
                     if str(order.get('user_id')) == str(game_id) and str(order.get('server_id')) == str(zone_id):
-                        if str(order.get('order_status', '')).lower() == 'success' or str(order.get('status')) == '1':
-                            real_order_id = str(order.get('increment_id', "Not found"))
-                            is_success = True
-                            break
+                        current_order_id = str(order.get('increment_id', ""))
+                        if current_order_id != last_known_order_id:
+                            if str(order.get('order_status', '')).lower() == 'success' or str(order.get('status')) == '1':
+                                real_order_id = current_order_id
+                                is_success = True
+                                break
         except Exception: pass
 
         if not is_success:
@@ -406,6 +423,18 @@ async def process_mcc_order(game_id, zone_id, product_id):
                 else: return {"status": "error", "message": "Auto-Login failed. Please provide /setcookie again."}
             return {"status": "error", "message": "Invalid account or unable to purchase."}
 
+        # 🟢 [အသစ်ထည့်ထားသောအပိုင်း] Payment မလုပ်ခင် နောက်ဆုံး Order ID ကို အရင်ရှာထားမည်
+        last_known_order_id = None
+        try:
+            pre_hist_raw = await asyncio.to_thread(scraper.get, order_api_url, params={'type': 'orderlist', 'p': '1', 'pageSize': '5'}, headers=headers)
+            pre_hist_json = pre_hist_raw.json()
+            if 'list' in pre_hist_json and len(pre_hist_json['list']) > 0:
+                for order in pre_hist_json['list']:
+                    if str(order.get('user_id')) == str(game_id) and str(order.get('server_id')) == str(zone_id):
+                        last_known_order_id = str(order.get('increment_id', ""))
+                        break
+        except Exception: pass
+
         pay_data = {'_csrf': csrf_token, 'user_id': game_id, 'zone_id': zone_id, 'pay_methond': 'smilecoin', 'product_id': product_id, 'channel_method': 'smilecoin', 'flowid': flowid, 'email': '', 'coupon_id': ''}
         pay_response_raw = await asyncio.to_thread(scraper.post, pay_url, data=pay_data, headers=headers)
         pay_text = pay_response_raw.text.lower()
@@ -417,16 +446,19 @@ async def process_mcc_order(game_id, zone_id, product_id):
         real_order_id = "Not found"
         is_success = False
 
+        # 🟢 [ပြင်ဆင်ထားသောအပိုင်း] ပြေစာအသစ်ဖြစ်မှသာ Success သတ်မှတ်မည်
         try:
             hist_res_raw = await asyncio.to_thread(scraper.get, order_api_url, params={'type': 'orderlist', 'p': '1', 'pageSize': '5'}, headers=headers)
             hist_json = hist_res_raw.json()
             if 'list' in hist_json and len(hist_json['list']) > 0:
                 for order in hist_json['list']:
                     if str(order.get('user_id')) == str(game_id) and str(order.get('server_id')) == str(zone_id):
-                        if str(order.get('order_status', '')).lower() == 'success' or str(order.get('status')) == '1':
-                            real_order_id = str(order.get('increment_id', "Not found"))
-                            is_success = True
-                            break
+                        current_order_id = str(order.get('increment_id', ""))
+                        if current_order_id != last_known_order_id:
+                            if str(order.get('order_status', '')).lower() == 'success' or str(order.get('status')) == '1':
+                                real_order_id = current_order_id
+                                is_success = True
+                                break
         except Exception: pass
 
         if not is_success:
@@ -582,11 +614,8 @@ async def check_balance_command(client, message: Message):
     else:
         await message.reply(report)
 
+# 📜 HISTORY COMMAND (.his / /history) 
 
-
-# ==========================================
-# 📜 HISTORY COMMAND (.his / /history)
-# ==========================================
 @app.on_message(filters.command("history") | filters.regex(r"(?i)^\.his$"))
 async def send_order_history(client, message: Message):
     if not await is_authorized(message):
@@ -637,7 +666,6 @@ async def clean_order_history(client, message: Message):
         await message.reply(f"🗑️ **History Cleaned Successfully.**\nDeleted {deleted_count} order records from your history.")
     else:
         await message.reply("📜 **No Order History Found to Clean.**")
-
 
 # ==========================================
 # 6. 📌 ACTIVATION CODE FOR VIRTUAL WALLET (.topup AUTO DETECT)
@@ -1291,7 +1319,6 @@ async def send_help_message(client, message: Message):
         f"<b>👤 𝐔𝐬𝐞𝐫 𝐓𝐨𝐨𝐥𝐬</b>\n"
         f"🔹 <code>.balance</code>  : Check Wallet Balance\n"
         f"🔹 <code>.his</code>      : View Order History\n"
-        f"🔹 <code>.clean</code>      : clean Order History\n"
         f"🔹 <code>.listb</code>     : View Price List\n"
         f"🔹 <code>.listp</code>     : View Price List\n"
         f"🔹 <code>.listmb</code>     : View Price List\n"
@@ -1304,7 +1331,7 @@ async def send_help_message(client, message: Message):
             f"<b>👑 𝐎𝐰𝐧𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬</b>\n"
             f"🔸 <code>/add ID</code>    : Add User\n"
             f"🔸 <code>/remove ID</code> : Remove User\n"
-            f"🔸 <code>/users</code>     : User List\n"
+            f"🔸 <code>/users</code>      : User List\n"
             f"🔸 <code>/setcookie</code> : Update Cookie\n"
         )
         
@@ -1334,8 +1361,12 @@ async def send_welcome(client, message: Message):
         EMOJI_3 = "5958289678837746828" # 🆔
         EMOJI_4 = "5956330306167376831" # 📊
         EMOJI_5 = "5954078884310814346" # 📞
+        EMOJI_6 = "5213403875670765022" # 💳
+        EMOJI_7 = "5202074005346983800" # 🇧🇷
+        EMOJI_8 = "5460873607729129032" # 🇵🇭
 
-        if is_authorized(message):
+
+        if await is_authorized(message):
             status = "🟢 Aᴄᴛɪᴠᴇ"
         else:
             status = "🔴 Nᴏᴛ Aᴄᴛɪᴠᴇ"
@@ -1371,9 +1402,8 @@ if __name__ == '__main__':
     print("နှလုံးသားမပါရင် ဘယ်အရာမှတရားမဝင်.....")
     
     loop = asyncio.get_event_loop()
+    loop.run_until_complete(db.setup_indexes())
     loop.run_until_complete(db.init_owner(OWNER_ID))
-    
-
     loop.create_task(keep_cookie_alive())
 
     print("Bot is successfully running (Fully Optimized Asyncio & Pyrogram & Motor)...")
