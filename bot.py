@@ -24,7 +24,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 API_ID = int(os.getenv('API_ID', 123456))  
 API_HASH = os.getenv('API_HASH', "your_api_hash_here") 
-OWNER_ID = int(os.getenv('OWNER_ID', 8197491717)) 
+OWNER_ID = int(os.getenv('OWNER_ID', 6437656033)) 
 FB_EMAIL = os.getenv('FB_EMAIL')
 FB_PASS = os.getenv('FB_PASS')
 
@@ -1380,7 +1380,7 @@ async def send_welcome(client, message: Message):
             f"<emoji id='{EMOJI_2}'>👤</emoji> Usᴇʀɴᴀᴍᴇ: {username_display}\n"
             f"<emoji id='{EMOJI_3}'>🆔</emoji> 𝐈𝐃: <code>{tg_id}</code>\n"
             f"<emoji id='{EMOJI_4}'>📊</emoji> Sᴛᴀᴛᴜs: {status}\n\n"
-            f"<emoji id='{EMOJI_5}'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @JulierboSh_151102"
+            f"<emoji id='{EMOJI_5}'>📞</emoji> Cᴏɴᴛᴀᴄᴛ ᴜs: @Julierbo2_151102"
         )
         
         await message.reply(welcome_text, parse_mode=ParseMode.HTML)
