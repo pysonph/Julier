@@ -824,19 +824,19 @@ async def handle_topup(client, message: Message):
 # ==========================================
 # 7. 📌 COMMAND TO CHECK ROLE
 # ==========================================
-@app.on_message(filters.regex(r"(?i)^/?role\b"))
+@app.on_message(filters.command("role") | filters.regex(r"(?i)^\.role\s+"))
 async def handle_check_role(client, message: Message):
     if not await is_authorized(message):
         return await message.reply("ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
 
-    match = re.search(r"(?i)^/?role\s+(\d+)\s*\(\s*(\d+)\s*\)", message.text.strip())
+    match = re.search(r"(?i)^[./]?role\s+(\d+)\s*[\(]?\s*(\d+)\s*[\)]?", message.text.strip())
     if not match:
-        return await message.reply("❌ Invalid format:\n(Example - `/role 123456789 (12345)`)")
+        return await message.reply("❌ Invalid format:\n(Example - `.role 123456789 12345` or `/role 123456789 (12345)`)")
 
     game_id = match.group(1).strip()
     zone_id = match.group(2).strip()
     
-    loading_msg = await message.reply("💻")
+    loading_msg = await message.reply("Search region")
 
     scraper = await get_main_scraper()
     
@@ -1101,7 +1101,7 @@ async def handle_mcc_buy(client, message: Message):
                     await message.reply(error_text)
                     continue
                 
-                loading_msg = await message.reply(f"💻")
+                loading_msg = await message.reply(f"mcgg diamond recharging")
                 
                 success_count = 0
                 fail_count = 0
