@@ -585,7 +585,7 @@ async def handle_raw_cookie_dump(client, message: Message):
 
 ##################################################
 
-@app.on_message(filters.command("balance"))
+@app.on_message(filters.command("balance") | filters.regex(r"(?i)^\.bal$"))
 async def check_balance_command(client, message: Message):
     if not await is_authorized(message): 
         return await message.reply("ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴜsᴇʀ.")
